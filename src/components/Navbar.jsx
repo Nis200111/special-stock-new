@@ -1,153 +1,211 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import { FaBars, FaTimes, FaGlobe, FaShoppingCart, FaChevronDown } from "react-icons/fa";
-import { FiHeart } from "react-icons/fi";
-import { navLinks } from "@/data/mockData";
+import { Menu, X, Globe, Heart, ShoppingCart, ChevronDown } from "lucide-react"
+import { FaCartShopping } from "react-icons/fa6";
+import IMGLOGO from "../assets/speciallogo.png";
 
-const Navbar = () => {
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const user = null; // Mock user state, set to { name: "Thanuja" } to test logged in state
-
-    const toggleMobileMenu = () => {
-        setMobileMenuOpen(!mobileMenuOpen);
-    };
+export default function Navbar() {
+    const [mobileOpen, setMobileOpen] = useState(false);
 
     return (
         <>
-            <header className="text-white px-4 sm:px-6 py-3 bg-[#131313]">
-                <div className="flex items-center justify-between w-full max-w-7xl mx-auto">
-                    {/* Mobile Menu Button - Left Side */}
+            {/* Top Announcement */}
+            <div className="bg-[#3477a2] text-white text-center text-xs sm:text-sm py-1 sm:py-3 px-4 tracking-[0.03rem]">
+                <span className="block sm:inline">
+                    Access our exclusive premium image collection with your account.
+                </span>
+                <Link
+                    href="/register"
+                    className="bg-white text-black px-3 py-2 rounded-full ml-0 sm:ml-2 mt-2 sm:mt-0 text-xs font-bold hover:bg-gray-100 transition-colors inline-block"
+                >
+                    Sign up now
+                </Link>
+            </div>
+
+            {/* Main Navbar */}
+            <header className="text-white px-4 sm:px-6 py-3 bg-[#131313] relative">
+                <div className="flex items-center justify-between w-full">
+                    {/* Mobile button */}
                     <div className="flex lg:hidden items-center">
                         <button
-                            onClick={toggleMobileMenu}
-                            className="text-white p-2 hover:bg-gray-800 rounded focus:outline-none"
+                            className="text-white p-2 hover:bg-gray-800 rounded"
+                            onClick={() => setMobileOpen(true)}
+                            aria-label="Open menu"
                         >
-                            {mobileMenuOpen ? <FaTimes className="text-xl" /> : <FaBars className="text-xl" />}
+                            <Menu className="h-6 w-6" />
                         </button>
                     </div>
 
-                    <div></div>
+                    <div />
 
-                    {/* Logo Center */}
-                    <div className="flex-grow flex justify-center lg:absolute lg:left-1/2 lg:transform lg:-translate-x-1/2">
-                        <Link href="/" className="flex items-center gap-2">
-                            {/* Replace with actual logo image if available */}
-                            <img src="/speciallogo.png" alt="Special Stocks" className="h-8 sm:h-10 filter invert" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block' }} />
-                            <span className="text-xl sm:text-2xl lg:text-3xl font-bold hidden">Special Stocks</span>
+                    {/* Logo center */}
+                    <div className="flex-grow flex justify-center lg:absolute lg:left-1/2 lg:-translate-x-1/2">
+                        <Link href="/" className="flex items-center">
+                            <img
+                                src={IMGLOGO.src}
+                                alt="Special Stocks"
+                                className="max-h-[32px] sm:max-h-[40px] lg:max-h-[48px] w-auto mt-5 invert"
+                            />
                         </Link>
                     </div>
 
-                    {/* Right Side */}
+                    {/* Right side */}
                     <div className="flex items-center space-x-2 sm:space-x-4">
-                        {/* Pricing Dropdown */}
                         <div className="hidden sm:flex items-center space-x-1 hover:text-gray-300 cursor-pointer">
                             <span className="text-sm">Pricing</span>
-                            <FaChevronDown className="text-xs" />
+                            <ChevronDown className="h-4 w-4 opacity-80" />
                         </div>
 
-                        <FaGlobe className="hover:text-gray-300 cursor-pointer hidden sm:block" />
-                        <FiHeart className="hover:text-gray-300 cursor-pointer text-lg hidden sm:flex" />
+                        <Globe className="h-5 w-5 hover:text-gray-300 cursor-pointer hidden sm:block" strokeWidth={2.5} />
+                        <Heart className="h-5 w-5 hover:text-gray-300 cursor-pointer hidden sm:block" />
 
-                        <Link href="/cart">
-                            <FaShoppingCart className="hover:text-gray-300 cursor-pointer text-lg" />
+                        <Link href="/cart" aria-label="Cart">
+                            <FaCartShopping className="h-5 w-5 hover:text-gray-300 cursor-pointer" />
                         </Link>
 
-                        {/* Login/Dashboard Button */}
-                        {user ? (
-                            <Link
-                                href="/dashboard"
-                                className="bg-white text-black px-3 sm:px-4 py-2 sm:py-2.5 rounded-md font-bold text-sm sm:text-md hover:bg-gray-100 transition-colors hidden sm:flex"
-                            >
-                                Dashboard
-                            </Link>
-                        ) : (
-                            <Link
-                                href="/login"
-                                className="bg-white text-black px-3 sm:px-4 py-2 sm:py-2.5 rounded-md font-bold text-sm sm:text-md hover:bg-gray-100 transition-colors hidden sm:flex"
-                            >
-                                Log in
-                            </Link>
-                        )}
+                        <Link
+                            href="/login"
+                            className="bg-white text-black px-3 sm:px-4 py-2 sm:py-2.5 rounded-md font-bold text-sm hover:bg-gray-100 transition-colors hidden sm:flex"
+                        >
+                            Log in
+                        </Link>
                     </div>
                 </div>
 
-                {/* Desktop Navigation Menu */}
-                <div className="hidden lg:flex justify-center mt-4">
+                {/* Desktop nav */}
+                <div className="hidden lg:flex justify-center mt-5">
                     <nav className="flex items-center space-x-6 xl:space-x-8 text-sm relative">
-                        <div className="group relative">
-                            <Link href="/images" className="flex items-center space-x-1 hover:text-gray-300 cursor-pointer py-2">
+                        <div className="relative group">
+                            <Link href="/images" className="flex items-center space-x-1 hover:text-gray-300">
                                 <span>Images</span>
-                                <FaChevronDown className="text-xs" />
+                                <ChevronDown className="h-4 w-4 opacity-80" />
                             </Link>
-                            {/* Dropdown would go here, simplified for now */}
+
+                            <div className="absolute top-full left-0 mt-2 bg-black text-white rounded-lg shadow-xl hidden min-w-[200px] z-50 group-hover:block">
+                                <Link href="/images" className="block px-6 py-3 hover:bg-gray-800">
+                                    <div className="font-semibold">Images home</div>
+                                </Link>
+                                <Link href="/search?type=vector" className="block px-6 py-3 hover:bg-gray-800">
+                                    <div className="font-semibold">Vectors</div>
+                                </Link>
+                                <Link href="/search?type=photo" className="block px-6 py-3 hover:bg-gray-800">
+                                    <div className="font-semibold">Photos</div>
+                                </Link>
+                                <Link href="/search?type=premium" className="block px-6 py-3 hover:bg-gray-800">
+                                    <div className="font-semibold">Premium Images</div>
+                                </Link>
+                                <Link href="/collections" className="block px-6 py-3 hover:bg-gray-800 rounded-b-lg">
+                                    <div className="font-semibold">Collections</div>
+                                </Link>
+                            </div>
                         </div>
 
-                        <div className="group relative">
-                            <Link href="/video" className="flex items-center space-x-1 hover:text-gray-300 cursor-pointer py-2">
+                        <div className="relative group">
+                            <Link href="/video" className="flex items-center space-x-1 hover:text-gray-300">
                                 <span>Video</span>
-                                <FaChevronDown className="text-xs" />
+                                <ChevronDown className="h-4 w-4 opacity-80" />
                             </Link>
+
+                            <div className="absolute top-full left-0 mt-2 bg-black text-white rounded-lg shadow-xl hidden min-w-[200px] z-50 group-hover:block">
+                                <Link href="/video" className="block px-6 py-3 hover:bg-gray-800">
+                                    <div className="font-semibold">Video home</div>
+                                </Link>
+                                <Link href="/search?type=premium-video" className="block px-6 py-3 hover:bg-gray-800">
+                                    <div className="font-semibold">Premium video</div>
+                                </Link>
+                                <Link href="/collections?type=video" className="block px-6 py-3 hover:bg-gray-800 rounded-b-lg">
+                                    <div className="font-semibold">Collections</div>
+                                </Link>
+                            </div>
                         </div>
 
-                        <div className="group relative">
-                            <Link href="/music" className="flex items-center space-x-1 hover:text-gray-300 cursor-pointer py-2">
-                                <span>Music</span>
-                                <FaChevronDown className="text-xs" />
-                            </Link>
-                        </div>
+                        <Link href="/search?type=music" className="flex items-center space-x-1 hover:text-gray-300">
+                            <span>Music</span>
+                            <ChevronDown className="h-4 w-4 opacity-80" />
+                        </Link>
 
-                        <Link href="/exclusive-images" className="hover:text-gray-300 cursor-pointer font-medium">
-                            Exclusive Images
+                        <Link href="/exclusive-images" className="hover:text-gray-300">
+                            <span className="font-medium">Exclusive Images</span>
                         </Link>
                     </nav>
                 </div>
             </header>
 
-            {/* Mobile Menu Overlay */}
-            {mobileMenuOpen && (
-                <div className="fixed inset-0 z-50 flex">
-                    <div className="relative flex-1 w-80 max-w-[80%] bg-white h-full shadow-xl overflow-y-auto pl-6 pr-6 pt-6 pb-6 text-black">
-                        <div className="flex items-center justify-between mb-6">
-                            <span className="text-xl font-bold">Menu</span>
-                            <button onClick={toggleMobileMenu} className="text-gray-500 hover:text-gray-700">
-                                <FaTimes className="text-xl" />
-                            </button>
-                        </div>
-
-                        <div className="space-y-4">
-                            <div className="pb-4 border-b border-gray-100">
-                                <p className="text-sm text-gray-500 mb-4">Browse our assets</p>
-                                {navLinks.map((link) => (
-                                    <Link key={link.name} href={link.href} className="block py-3 text-gray-900 border-b border-gray-100 font-medium">
-                                        {link.name}
-                                    </Link>
-                                ))}
-                            </div>
-                            <div className="pt-4">
-                                {user ? (
-                                    <Link href="/dashboard" className="block w-full bg-blue-600 text-white py-3 rounded-lg font-medium text-center hover:bg-blue-700">
-                                        Dashboard
-                                    </Link>
-                                ) : (
-                                    <div className="space-y-3">
-                                        <Link href="/register" className="block w-full bg-red-500 text-white py-3 rounded-lg font-medium text-center hover:bg-red-600">
-                                            Sign up
-                                        </Link>
-                                        <Link href="/login" className="block w-full bg-gray-100 text-gray-900 py-3 rounded-lg font-medium text-center hover:bg-gray-200">
-                                            Log in
-                                        </Link>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                    <div className="flex-1 bg-black bg-opacity-50" onClick={toggleMobileMenu}></div>
-                </div>
+            {/* Mobile overlay */}
+            {mobileOpen && (
+                <button
+                    className="fixed inset-0 bg-black/50 z-40"
+                    onClick={() => setMobileOpen(false)}
+                    aria-label="Close overlay"
+                />
             )}
+
+            {/* Mobile menu */}
+            <aside
+                className={`fixed top-0 left-0 h-full w-80 bg-white z-50 shadow-lg overflow-y-auto transform transition-transform duration-300 ${mobileOpen ? "translate-x-0" : "-translate-x-full"
+                    }`}
+            >
+                <div className="p-6">
+                    <div className="flex items-center justify-between mb-6">
+                        <img src="/speciallogo.png" alt="Special Stocks" className="h-8 w-auto" />
+                        <button
+                            onClick={() => setMobileOpen(false)}
+                            className="text-gray-500 hover:text-gray-700 p-2"
+                            aria-label="Close menu"
+                        >
+                            <X className="h-6 w-6" />
+                        </button>
+                    </div>
+
+                    <div className="space-y-1">
+                        <p className="text-sm text-gray-500 mb-4">Browse our assets</p>
+
+                        <Link
+                            href="/images"
+                            className="flex items-center justify-between py-3 border-b border-gray-100 hover:bg-gray-50 px-2 rounded"
+                            onClick={() => setMobileOpen(false)}
+                        >
+                            <span className="text-gray-900 font-medium">Images</span>
+                        </Link>
+
+                        <Link
+                            href="/video"
+                            className="flex items-center justify-between py-3 border-b border-gray-100 hover:bg-gray-50 px-2 rounded"
+                            onClick={() => setMobileOpen(false)}
+                        >
+                            <span className="text-gray-900 font-medium">Video</span>
+                        </Link>
+
+                        <Link
+                            href="/search?type=music"
+                            className="flex items-center justify-between py-3 border-b border-gray-100 hover:bg-gray-50 px-2 rounded"
+                            onClick={() => setMobileOpen(false)}
+                        >
+                            <span className="text-gray-900 font-medium">Music</span>
+                        </Link>
+
+                        <Link
+                            href="/exclusive-images"
+                            className="flex items-center justify-between py-3 border-b border-gray-100 hover:bg-gray-50 px-2 rounded"
+                            onClick={() => setMobileOpen(false)}
+                        >
+                            <span className="text-gray-900 font-medium">Exclusive Images</span>
+                        </Link>
+                    </div>
+
+                    <div className="mt-8 pt-6 border-t border-gray-200">
+                        <Link
+                            href="/login"
+                            className="block w-full bg-gray-100 text-gray-900 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors text-center"
+                            onClick={() => setMobileOpen(false)}
+                        >
+                            Log in
+                        </Link>
+                    </div>
+                </div>
+            </aside>
         </>
     );
-};
-
-export default Navbar;
+}
