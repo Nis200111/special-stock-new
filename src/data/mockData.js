@@ -9,7 +9,7 @@ export const featuredImages = [
     {
         id: 1,
         title: "Autumn Forest",
-        thumbnail_path: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80",
+        thumbnail_path: "/assets/serve_public1.jpg",
         file_type: "image",
         price: 0.00,
         view_count: 1200,
@@ -18,16 +18,16 @@ export const featuredImages = [
     {
         id: 2,
         title: "Urban Cityscape",
-        thumbnail_path: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800&q=80",
+        thumbnail_path: "assets/serve_public2.jpg",
         file_type: "image",
         price: 15.00,
         view_count: 850,
-        seller_name: "CityShooter"
+        seller_name: "CityShooter",
     },
     {
         id: 3,
         title: "Mountain Lake",
-        thumbnail_path: "https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=800&q=80",
+        thumbnail_path: "/assets/serve_public3.jpg",
         file_type: "image",
         price: 0.00,
         view_count: 2100,
@@ -36,7 +36,7 @@ export const featuredImages = [
     {
         id: 4,
         title: "Abstract Art",
-        thumbnail_path: "https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=800&q=80",
+        thumbnail_path: "/assets/serve_public4.jpg",
         file_type: "image",
         price: 25.00,
         view_count: 320,
@@ -45,7 +45,7 @@ export const featuredImages = [
     {
         id: 5,
         title: "Workspace Setup",
-        thumbnail_path: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=800&q=80",
+        thumbnail_path: "/assets/serve_public5.jpg",
         file_type: "image",
         price: 0.00,
         view_count: 1500,
@@ -54,19 +54,73 @@ export const featuredImages = [
     {
         id: 6,
         title: "Healthy Food",
-        thumbnail_path: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&q=80",
+        thumbnail_path: "/assets/serve_public6.jpg",
         file_type: "image",
         price: 10.00,
         view_count: 600,
         seller_name: "FoodieLens"
     },
+    {
+        id: 7,
+        title: "",
+        thumbnail_path: "/assets/serve_public7.jpg",
+        file_type: "image",
+        price: 29.99,
+        view_count: 5000,
+        seller_name: "BizStock"
+    },
+    {
+        id: 8,
+        title: "",
+        thumbnail_path: "/assets/serve_public8.jpg",
+        file_type: "image",
+        price: 0.00,
+        view_count: 4200,
+        seller_name: "FamilyMoments"
+    },
+    {
+        id: 9,
+        title: "",
+        thumbnail_path: "/assets/serve_public9.jpg",
+        file_type: "image",
+        price: 0.00,
+        view_count: 3800,
+        seller_name: "DevLife"
+    },
+    {
+        id: 10,
+        title: "",
+        thumbnail_path: "/assets/serve_public10.jpg",
+        file_type: "image",
+        price: 12.50,
+        view_count: 3100,
+        seller_name: "Wanderlust"
+    },
+    {
+        id: 11,
+        title: "",
+        thumbnail_path: "/assets/serve_public11.jpg",
+        file_type: "image",
+        price: 0.00,
+        view_count: 2500,
+        seller_name: "TechViews"
+    },
+    {
+        id: 12,
+        title: "",
+        thumbnail_path: "/assets/serve_public12.webp",
+        file_type: "image",
+        price: 0.00,
+        view_count: 2000,
+        seller_name: "FoodieLens"
+    }
 ];
 
 export const popularContent = [
     {
         id: 101,
         title: "Business Meeting",
-        thumbnail_path: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80",
+        thumbnail_path: "/assets/serve_public7.jpg",
         file_type: "image",
         price: 29.99,
         view_count: 5000,
@@ -75,7 +129,7 @@ export const popularContent = [
     {
         id: 102,
         title: "Happy Family",
-        thumbnail_path: "https://images.unsplash.com/photo-1511895426328-dc8714191300?w=800&q=80",
+        thumbnail_path: "/assets/serve_public8.jpg",
         file_type: "image",
         price: 0.00,
         view_count: 4200,
@@ -84,7 +138,7 @@ export const popularContent = [
     {
         id: 103,
         title: "Coding on Laptop",
-        thumbnail_path: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80",
+        thumbnail_path: "/assets/serve_public9.jpg",
         file_type: "image",
         price: 0.00,
         view_count: 3800,
@@ -93,7 +147,7 @@ export const popularContent = [
     {
         id: 104,
         title: "Travel Adventure",
-        thumbnail_path: "https://images.unsplash.com/photo-1502791451862-7bd8c1df43a7?w=800&q=80",
+        thumbnail_path: "/assets/serve_public10.jpg",
         file_type: "image",
         price: 12.50,
         view_count: 3100,
@@ -105,13 +159,13 @@ export const collections = [
     {
         id: 1,
         name: "AI Generated Art",
-        cover_image_path: "https://images.unsplash.com/photo-1678284532986-74fc2152862d?w=800&q=80",
+        cover_image_path: "/assets/serve_collection_cover1.png",
         asset_count: 154
     },
     {
         id: 2,
         name: "Modern Business",
-        cover_image_path: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80",
+        cover_image_path: "/assets/serve_collection_cover2.png",
         asset_count: 89
     },
     {
@@ -125,12 +179,6 @@ export const collections = [
         name: "Video Backgrounds",
         cover_image_path: "https://images.unsplash.com/photo-1536240478700-b869070f9279?w=800&q=80",
         asset_count: 56
-    },
-    {
-        id: 5,
-        name: "Abstract Patterns",
-        cover_image_path: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=800&q=80",
-        asset_count: 112
     }
 ];
 

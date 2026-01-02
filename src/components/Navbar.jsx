@@ -12,15 +12,15 @@ export default function Navbar() {
     return (
         <>
             {/* Top Announcement */}
-            <div className="bg-[#3477a2] text-white text-center text-xs sm:text-sm py-1 sm:py-3 px-4 tracking-[0.03rem]">
+            <div className="bg-[#3477a2] text-white text-center text-small sm:text-sm py-1 sm:py-1.99 px-2 tracking-[0.02rem]">
                 <span className="block sm:inline">
-                    Access our exclusive premium image collection with your account.
+                    Get 10 royalty-free image downloads each month with a cost-saving subscription.
                 </span>
                 <Link
                     href="/register"
-                    className="bg-white text-black px-3 py-2 rounded-full ml-0 sm:ml-2 mt-2 sm:mt-0 text-xs font-bold hover:bg-gray-100 transition-colors inline-block"
+                    className="bg-white text-black px-2 py-2 rounded-full ml-0 sm:ml-2 mt-2 sm:mt-0 text-xs font-bold hover:bg-gray-100 transition-colors inline-block"
                 >
-                    Sign up now
+                    Buy Now
                 </Link>
             </div>
 
