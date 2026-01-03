@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Crown, ChevronDown, Search, Star, ChevronLeft, ChevronRight } from "lucide-react";
+import { Crown, ChevronDown, Search, Star, ChevronLeft, ChevronRight, Image as ImageIcon, Video as VideoIcon, Music as MusicIcon } from "lucide-react";
+
 
 export default function exclusiveImages() {
     const router = useRouter();
@@ -25,15 +26,15 @@ export default function exclusiveImages() {
 
     const exclusiveImages = useMemo(
         () => [
-            { id: 4, title: "A photograph of a German Shepherd dog captured in a moment of exuberant play", featured: true, thumbUrl: "https://www.specialstocks.us/serve_public.php?id=4&type=thumbnail&content=exclusive", href: "/exclusive-image-details?id=4" },
-            { id: 6, title: "A Joyful German Shepherd", featured: true, thumbUrl: "https://www.specialstocks.us/serve_public.php?id=6&type=thumbnail&content=exclusive", href: "/exclusive-image-details?id=6" },
-            { id: 3, title: "A photograph of a spirited German Shepherd mid-leap", thumbUrl: "https://www.specialstocks.us/serve_public.php?id=3&type=thumbnail&content=exclusive", href: "/exclusive-image-details?id=3" },
-            { id: 9, title: "A Spirited German Shephed", thumbUrl: "https://www.specialstocks.us/serve_public.php?id=9&type=thumbnail&content=exclusive", href: "/exclusive-image-details?id=9" },
-            { id: 8, title: "A Photograph Of A Lively German Shepherd", thumbUrl: "https://www.specialstocks.us/serve_public.php?id=8&type=thumbnail&content=exclusive", href: "/exclusive-image-details?id=8" },
-            { id: 10, title: "German Shepherd Dog", thumbUrl: "https://www.specialstocks.us/serve_public.php?id=10&type=thumbnail&content=exclusive", href: "/exclusive-image-details?id=10" },
-            { id: 11, title: "A Photograph Of A German Shepherd Dog", thumbUrl: "https://www.specialstocks.us/serve_public.php?id=11&type=thumbnail&content=exclusive", href: "/exclusive-image-details?id=11" },
-            { id: 5, title: "A Joyful German Shepherd", thumbUrl: "https://www.specialstocks.us/serve_public.php?id=5&type=thumbnail&content=exclusive", href: "/exclusive-image-details?id=5" },
-            { id: 12, title: "Happy German Shepherd Dog", thumbUrl: "https://www.specialstocks.us/serve_public.php?id=12&type=thumbnail&content=exclusive", href: "/exclusive-image-details?id=12" },
+            { id: 4, title: "A photograph of a German Shepherd dog captured in a moment of exuberant play", featured: true, thumbUrl: "/assets/exclusiveImage/sp1.jpg", href: "/exclusive-image-details?id=4" },
+            { id: 6, title: "A Joyful German Shepherd", featured: true, thumbUrl: "/assets/exclusiveImage/sp2.webp", href: "/exclusive-image-details?id=6" },
+            { id: 3, title: "A photograph of a spirited German Shepherd mid-leap", thumbUrl: "/assets/exclusiveImage/sp3.jpg", href: "/exclusive-image-details?id=3" },
+            { id: 9, title: "A Spirited German Shephed", thumbUrl: "/assets/exclusiveImage/sp4.jpg", href: "/exclusive-image-details?id=9" },
+            { id: 8, title: "A Photograph Of A Lively German Shepherd", thumbUrl: "/assets/exclusiveImage/sp5.jpg", href: "/exclusive-image-details?id=8" },
+            { id: 10, title: "German Shepherd Dog", thumbUrl: "/assets/exclusiveImage/sp6.jpg", href: "/exclusive-image-details?id=10" },
+            { id: 11, title: "A Photograph Of A German Shepherd Dog", thumbUrl: "/assets/exclusiveImage/sp8.jpg", href: "/exclusive-image-details?id=11" },
+            { id: 5, title: "A Joyful German Shepherd", thumbUrl: "/assets/exclusiveImage/sp9.jpg", href: "/exclusive-image-details?id=5" },
+            { id: 12, title: "Happy German Shepherd Dog", thumbUrl: "/assets/exclusiveImage/sp1.jpg", href: "/exclusive-image-details?id=12" }, // Reusing sp1 as only 8 images are available
         ],
         []
     );
@@ -114,7 +115,7 @@ export default function exclusiveImages() {
             {/* HERO */}
             <section
                 className="relative min-h-[400px] sm:min-h-[500px] flex flex-col justify-center items-center text-white overflow-hidden bg-cover bg-center bg-no-repeat"
-                style={{ backgroundImage: "url(/resources/bg2.png)" }}
+                style={{ backgroundImage: "url('/assets/bg2.png')" }}
             >
                 <div className="relative z-10 text-center px-4 sm:px-6 max-w-6xl w-full">
                     <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 leading-tight">
@@ -191,14 +192,74 @@ export default function exclusiveImages() {
                         </form>
                     </div>
                 </div>
+                <div className="absolute bottom-5 left-5 z-20 flex items-center gap-2 text-sm font-medium text-white/90">
+                    <Crown className="h-4 w-4 text-purple-600" /> <span>Exclusive premium content...</span>
+                </div>
             </section>
+            <section>
+                <div className="py-12 sm:py-16 px-4 sm:px-32 ml-16 mr-16 bg-gray-50 text-gray-900 text-4xl font-semibold">
+                    <h2>Explore our exclusive collection</h2>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 tracking-[0.01rem]">
+                        <Link href="/images" className="flex items-center gap-3 hover:bg-gray-50 p-3 transition group">
+                            <div className="w-16 h-16 md:w-24 md:h-24 overflow-hidden relative bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform duration-300">
+                                <ImageIcon className="w-8 h-8 md:w-10 md:h-10" />
+                            </div>
+                            <p className="text-sm font-medium text-gray-700 group-hover:text-black">
+                                Featured Banners
+                            </p>
+                        </Link>
 
+                        <Link href="/video" className="flex items-center gap-3 hover:bg-gray-50 p-3 transition group">
+                            <div className="w-16 h-16 md:w-24 md:h-24 overflow-hidden relative bg-gradient-to-br from-blue-400 to-cyan-400 flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform duration-300">
+                                <VideoIcon className="w-8 h-8 md:w-10 md:h-10" />
+                            </div>
+                            <p className="text-sm font-medium text-gray-700 group-hover:text-black">System Graphics</p>
+                        </Link>
+
+                        <Link href="/music" className="flex items-center gap-3 hover:bg-gray-50 p-3 transition group">
+                            <div className="w-16 h-16 md:w-24 md:h-24 overflow-hidden relative bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform duration-300">
+                                <MusicIcon className="w-8 h-8 md:w-10 md:h-10" />
+                            </div>
+                            <p className="text-sm font-medium text-gray-700 group-hover:text-black">Backgrounds</p>
+                        </Link>
+
+                        <Link href="/exclusive-images" className="flex items-center gap-3 hover:bg-gray-50 p-3 transition group">
+                            <div className="w-16 h-16 md:w-24 md:h-24 overflow-hidden relative bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform duration-300">
+                                <Crown className="w-8 h-8 md:w-10 md:h-10" />
+                            </div>
+                            <p className="text-sm font-medium text-gray-700 group-hover:text-black">Logo Variations</p>
+                        </Link>
+                    </div>
+                </div>
+            </section>
             {/* GRID */}
             <section className="py-12 sm:py-16 px-4 sm:px-6 bg-gray-50 text-gray-900">
                 <div className="max-w-7xl mx-auto">
                     <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 sm:mb-8">
                         Browse exclusive content
                     </h3>
+
+                    {/* Filter Pills */}
+                    <div className="flex flex-wrap items-center gap-3 mb-8 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] pb-2">
+                        <button className="flex-shrink-0 flex items-center gap-2 px-5 py-2.5 bg-gray-900 text-white rounded-full text-sm font-medium hover:bg-black transition-colors">
+                            <Crown className="w-4 h-4 text-purple-400" /> All Exclusive
+                        </button>
+                        {["Featured banners", "System graphics", "Background images", "Logo variations", "Marketing materials"].map((label) => (
+                            <button key={label} className="flex-shrink-0 flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-gray-300 rounded-full text-sm font-medium transition-all">
+                                <Search className="w-3.5 h-3.5 text-gray-400" /> {label}
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* Tabs */}
+                    <div className="flex items-center gap-8 border-b border-gray-200 mb-8">
+                        <button className="pb-3 border-b-2 border-gray-900 text-gray-900 font-semibold text-sm">
+                            Featured content
+                        </button>
+                        <button className="pb-3 border-b-2 border-transparent text-gray-500 hover:text-gray-900 font-medium text-sm transition-colors">
+                            Most Popular
+                        </button>
+                    </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
                         {exclusiveImages.map((item) => {
@@ -210,13 +271,12 @@ export default function exclusiveImages() {
                                     href={item.href}
                                     className="relative group cursor-pointer block rounded-lg overflow-hidden h-64"
                                 >
-                                    {!isLoaded && <div className="absolute inset-0 z-[1] skeleton-loader" />}
+
 
                                     <img
                                         src={item.thumbUrl}
                                         alt={item.title}
-                                        className={`absolute inset-0 w-full h-full object-cover transition-all duration-500 ${isLoaded ? "opacity-100 blur-0" : "opacity-0 blur-[20px]"
-                                            }`}
+                                        className="absolute inset-0 w-full h-full object-cover"
                                         loading="lazy"
                                         onLoad={() => handleLoaded(item.id)}
                                         onError={() => handleLoaded(item.id)}
@@ -233,7 +293,7 @@ export default function exclusiveImages() {
                                             </div>
                                         )}
 
-                                        <div className="absolute bottom-4 left-4 text-white">
+                                        <div className="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-2 group-hover:translate-y-0">
                                             <h5 className="font-semibold text-sm line-clamp-2">{item.title}</h5>
                                         </div>
                                     </div>
@@ -258,7 +318,7 @@ export default function exclusiveImages() {
                     <div className="relative">
                         <div
                             ref={sliderRef}
-                            className="flex overflow-x-auto scroll-smooth scrollbar-hide -mx-4 px-4 space-x-4 sm:space-x-6 pb-4"
+                            className="flex overflow-x-auto scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] -mx-4 px-4 space-x-4 sm:space-x-6 pb-4"
                         >
                             {exclusiveImages.filter((x) => x.featured).map((item) => (
                                 <div key={item.id} className="flex-shrink-0 w-72 sm:w-80">
@@ -299,25 +359,46 @@ export default function exclusiveImages() {
                         </button>
                     </div>
                 </div>
+                <div className="max-w-7xl mx-auto px-6 py-20 flex flex-col md:flex-row gap-8 items-center justify-between">
+                    {/* Left Side */}
+                    <div className="md:w-1/2">
+                        <h2 className="text-4xl md:text-5xl font-semibold text-gray-900 mb-2 leading-tight">
+                            Access premium <br /> exclusive content
+                        </h2>
+                        <p className="text-gray-600 text-medium mb-8 max-w-md">
+                            Sign up to access our full collection of exclusive, high-quality images
+                        </p>
+                        <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-8 rounded-full transition-colors text-lg">
+                            Get Started
+                        </button>
+                    </div>
+
+                    {/* Right Side */}
+                    <div className="md:w-1/2 flex gap-3">
+                        {/* Card 1 */}
+                        <div className="flex-1">
+                            <div className="aspect-[3/2] bg-gradient-to-br from-purple-400 to-pink-500 rounded-lg flex items-center justify-center text-white mb-4 shadow-md">
+                                <Crown className="w-12 h-12" />
+                            </div>
+                            <h4 className="font-bold text-gray-900 text-sm">Exclusive premium graphics</h4>
+                            <p className="text-gray-500 text-xs">High-quality system images</p>
+                        </div>
+
+                        {/* Card 2 */}
+                        <div className="flex-1">
+                            <div className="aspect-[3/2] bg-gradient-to-br from-blue-400 to-cyan-500 rounded-lg flex items-center justify-center text-white mb-4 shadow-md">
+                                <Star className="w-12 h-12" />
+                            </div>
+                            <h4 className="font-bold text-gray-900 text-sm">Featured collections</h4>
+                            <p className="text-gray-500 text-xs">Curated by our team</p>
+                        </div>
+                    </div>
+                </div>
             </section>
 
             <Footer />
 
-            {/* global helpers */}
-            <style jsx global>{`
-        .scrollbar-hide::-webkit-scrollbar { display: none; }
-        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-
-        .skeleton-loader {
-          background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-          background-size: 200% 100%;
-          animation: skeleton-loading 1.5s infinite;
-        }
-        @keyframes skeleton-loading {
-          0% { background-position: 200% 0; }
-          100% { background-position: -200% 0; }
-        }
-      `}</style>
+            {/* global helpers - Removed styled-jsx to fix hydration errors */}
         </div>
     );
 }
