@@ -7,19 +7,15 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Crown, ChevronDown, Search, Star, ChevronLeft, ChevronRight, Image as ImageIcon, Video as VideoIcon, Music as MusicIcon } from "lucide-react";
 
-
-export default function exclusiveImages() {
+export default function ExclusiveImages() {
     const router = useRouter();
-
-    // progress bar
-    const [progress, setProgress] = useState(0);
 
     // search
     const [searchMenuOpen, setSearchMenuOpen] = useState(false);
     const [q, setQ] = useState("");
     const [searchType, setSearchType] = useState({ value: "exclusive_images", label: "Exclusive images" });
 
-    // image skeleton/blur
+    // image loading state (kept for potential fade-in effects, though progress bar is removed)
     const [loadedMap, setLoadedMap] = useState({});
     const dropdownRef = useRef(null);
     const sliderRef = useRef(null);
@@ -34,44 +30,10 @@ export default function exclusiveImages() {
             { id: 10, title: "German Shepherd Dog", thumbUrl: "/assets/exclusiveImage/sp6.jpg", href: "/exclusive-image-details?id=10" },
             { id: 11, title: "A Photograph Of A German Shepherd Dog", thumbUrl: "/assets/exclusiveImage/sp8.jpg", href: "/exclusive-image-details?id=11" },
             { id: 5, title: "A Joyful German Shepherd", thumbUrl: "/assets/exclusiveImage/sp9.jpg", href: "/exclusive-image-details?id=5" },
-            { id: 12, title: "Happy German Shepherd Dog", thumbUrl: "/assets/exclusiveImage/sp1.jpg", href: "/exclusive-image-details?id=12" }, // Reusing sp1 as only 8 images are available
+            { id: 12, title: "Happy German Shepherd Dog", thumbUrl: "/assets/exclusiveImage/sp1.jpg", href: "/exclusive-image-details?id=12" },
         ],
         []
     );
-
-    // simulate progress to 95
-    useEffect(() => {
-        setProgress(0);
-        const interval = setInterval(() => {
-            setProgress((prev) => {
-                const next =
-                    prev < 30 ? prev + Math.random() * 10 :
-                        prev < 60 ? prev + Math.random() * 5 :
-                            prev < 90 ? prev + Math.random() * 2 :
-                                prev;
-                return Math.min(next, 95);
-            });
-        }, 200);
-
-        return () => clearInterval(interval);
-    }, []);
-
-    // complete when all loaded
-    useEffect(() => {
-        const total = exclusiveImages.length;
-        const loadedCount = Object.values(loadedMap).filter(Boolean).length;
-
-        if (total > 0) {
-            const pct = Math.min((loadedCount / total) * 100, 95);
-            setProgress((prev) => Math.max(prev, pct));
-        }
-
-        if (total > 0 && loadedCount === total) {
-            setProgress(100);
-            const t = setTimeout(() => setProgress(0), 500);
-            return () => clearTimeout(t);
-        }
-    }, [loadedMap, exclusiveImages]);
 
     // close dropdown outside click
     useEffect(() => {
@@ -84,7 +46,6 @@ export default function exclusiveImages() {
 
     const onSubmitSearch = (e) => {
         e.preventDefault();
-        // frontend-only routing (no backend)
         router.push(`/search?type=${encodeURIComponent(searchType.value)}&q=${encodeURIComponent(q)}`);
     };
 
@@ -99,17 +60,6 @@ export default function exclusiveImages() {
 
     return (
         <div className="bg-white text-gray-900">
-            {/* progress bar */}
-            <div
-                className="fixed top-0 left-0 h-[3px] z-[9999]"
-                style={{
-                    width: `${progress}%`,
-                    background: "linear-gradient(90deg,#ef4444,#dc2626)",
-                    transition: "width 0.3s ease",
-                    boxShadow: "0 0 10px rgba(239,68,68,0.5)",
-                }}
-            />
-
             <Navbar />
 
             {/* HERO */}
@@ -271,8 +221,6 @@ export default function exclusiveImages() {
                                     href={item.href}
                                     className="relative group cursor-pointer block rounded-lg overflow-hidden h-64"
                                 >
-
-
                                     <img
                                         src={item.thumbUrl}
                                         alt={item.title}
@@ -397,8 +345,6 @@ export default function exclusiveImages() {
             </section>
 
             <Footer />
-
-            {/* global helpers - Removed styled-jsx to fix hydration errors */}
         </div>
     );
 }
