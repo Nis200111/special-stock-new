@@ -2,7 +2,7 @@ export const navLinks = [
     { name: "Images", href: "/images" },
     { name: "Video", href: "/video" },
     { name: "Music", href: "/music" },
-    { name: "Exclusive Images", href: "/exclusive-images" },
+    { name: "Exclusive Images", href: "/exclusiveImages" },
 ];
 
 export const featuredImages = [
@@ -183,9 +183,12 @@ export const collections = [
 ];
 
 export const trustedCompanies = [
-    { name: "Digitus", logo: "/Digitus.png" }, // You'll need to ensure these files exist or use placeholders
+    { name: "Digitus", logo: "/Digitus.png" },
     { name: "CYOL", logo: "/CYOL.png" },
     { name: "JadeTimes", logo: "/Jadetimes.png" },
-    { name: "NY Films", logo: "/NYFiles.png" },
-    // Add more as needed
+    { name: "NY Films", logo: "/NYFIlms.png" },
+    { name: "Mistic", logo: "/Mistic.png" },
+    { name: "Special Brands", logo: "/SpecialBrands.png" },
+    { name: "Special Printers", logo: "/SpecialPrinters.png" },
+    { name: "Special Graphics", logo: "/SPecialGraphgics .png" },
 ];

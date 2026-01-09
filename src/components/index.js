@@ -8,7 +8,14 @@ import HeroBG from "../assets/bg1.png";
 import Images from "../assets/Images.jpg";
 import Video from "../assets/video.jpg";
 import Music from "../assets/music.jpg";
-// import IMG1 from "../assets/serve_public1.jpg";
+import DigitusLogo from "../assets/Digitus.png";
+import CyolLogo from "../assets/CYOL.png";
+import JadeTimesLogo from "../assets/Jadetimes.png";
+import NYFilmsLogo from "../assets/NYFIlms.png";
+import MisticLogo from "../assets/Mistic.png";
+import SpecialBrandsLogo from "../assets/SpecialBrands.png";
+import SpecialPrintersLogo from "../assets/SpecialPrinters.png";
+import SpecialGraphicsLogo from "../assets/SPecialGraphgics .png";
 
 // Re-export Navbar and Footer which remain in separate files
 export { default as Navbar } from './Navbar';
@@ -37,22 +44,22 @@ export const Hero = () => {
                 </h1>
 
                 <div className="hidden sm:flex flex-wrap justify-center gap-8 sm:gap-10 mb-6 sm:mb-8 text-sm">
-                    <div className="flex items-center mx-4 gap-2">
+                    <Link href="/images" className="flex items-center mx-4 gap-2 hover:text-red-500 transition-colors">
                         <FaImage />
                         <span>Images</span>
-                    </div>
-                    <div className="flex items-center mx-4 gap-2">
+                    </Link>
+                    <Link href="/video" className="flex items-center mx-4 gap-2 hover:text-red-500 transition-colors">
                         <FaVideo />
                         <span>Video</span>
-                    </div>
-                    <div className="flex items-center mx-4 gap-2">
+                    </Link>
+                    <Link href="/music" className="flex items-center mx-4 gap-2 hover:text-red-500 transition-colors">
                         <FaMusic />
                         <span>Music</span>
-                    </div>
-                    <div className="flex items-center mx-4 gap-2">
+                    </Link>
+                    <Link href="/exclusiveImages" className="flex items-center mx-4 gap-2 hover:text-red-500 transition-colors text-purple-400">
                         <FaRobot />
                         <span>Exclusive Images</span>
-                    </div>
+                    </Link>
                 </div>
 
                 <div className="flex flex-col lg:flex-row items-center justify-center gap-3 max-w-6xl mx-auto w-full">
@@ -152,7 +159,7 @@ export const Features = () => {
                         <p className="text-sm font-bold text-gray-700 group-hover:text-black">Music</p>
                     </Link>
 
-                    <Link href="/exclusive-images" className="flex items-center gap-3 hover:bg-gray-50 p-3 rounded-lg transition group">
+                    <Link href="/exclusiveImages" className="flex items-center gap-3 hover:bg-gray-50 p-3 rounded-lg transition group">
                         <div className="w-16 h-16 md:w-24 md:h-24 bg-gray-200 rounded-sm overflow-hidden relative">
                             <img src={Video.src} alt="Exclusive" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                         </div>
@@ -373,13 +380,29 @@ export const TrustedBy = () => {
                 Original uses 'animate-scroll' which we need to define in global CSS. 
                 We duplicate the list to ensure seamless looping. 
             */}
-                    {[...trustedCompanies, ...trustedCompanies, ...trustedCompanies].map((company, index) => (
-                        <div key={`${company.name}-${index}`} className="flex items-center justify-center mx-10 w-[200px] flex-shrink-0 h-20 opacity-60 hover:opacity-100 transition-opacity">
-                            {/* Replace text with img tags if logos are available */}
-                            <span className="text-xl font-bold text-gray-400">{company.name}</span>
-                            {/* <img src={company.logo} alt={company.name} className="h-full object-contain" /> */}
-                        </div>
-                    ))}
+                    {[...trustedCompanies, ...trustedCompanies, ...trustedCompanies].map((company, index) => {
+                        const logos = {
+                            "Digitus": DigitusLogo,
+                            "CYOL": CyolLogo,
+                            "JadeTimes": JadeTimesLogo,
+                            "NY Films": NYFilmsLogo,
+                            "Mistic": MisticLogo,
+                            "Special Brands": SpecialBrandsLogo,
+                            "Special Printers": SpecialPrintersLogo,
+                            "Special Graphics": SpecialGraphicsLogo
+                        };
+                        const logoSrc = logos[company.name]?.src || logos[company.name];
+
+                        return (
+                            <div key={`${company.name}-${index}`} className="flex items-center justify-center mx-10 w-[200px] flex-shrink-0 h-20 opacity-60 hover:opacity-100 transition-opacity">
+                                {logoSrc ? (
+                                    <img src={logoSrc} alt={company.name} className="h-full object-contain filter grayscale hover:grayscale-0 transition-all" />
+                                ) : (
+                                    <span className="text-xl font-bold text-gray-400">{company.name}</span>
+                                )}
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
 

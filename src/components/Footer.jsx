@@ -10,12 +10,16 @@ export default function Footer() {
     return (
         <footer className="bg-black text-gray-300 pt-12 px-4 sm:px-6">
             <div className="max-w-7xl mx-auto">
+                {/* Top Text Section */}
                 <p className="text-center text-sm text-gray-400 mb-10 border-b border-gray-700 pb-6 tracking-wider">
-                    Access exclusive premium content available only to registered users.
+                    We have more than 35 assets on Special Stocks.com as of January 9, 2026.
                 </p>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-8 text-sm">
-                    <div className="col-span-2">
+                {/* Main Grid Section */}
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 text-sm">
+
+                    {/* Column 1: Logo, Language & Contact */}
+                    <div className="col-span-2 md:col-span-1">
                         <div className="mb-6">
                             <Link href="/">
                                 <img
@@ -26,56 +30,79 @@ export default function Footer() {
                             </Link>
                         </div>
 
-                        <button className="flex items-center gap-2 border px-3 py-1 rounded bg-black text-white">
+                        <button className="flex items-center gap-2 border border-gray-600 px-3 py-1 rounded bg-black text-white mb-8 hover:border-gray-400 transition">
                             <Globe className="h-4 w-4" /> English
                             <ChevronDown className="h-4 w-4" />
                         </button>
+
+                        <div>
+                            <h4 className="text-white font-bold mb-3">Contact us</h4>
+                            <ul className="space-y-2">
+                                <li><Link href="#" className="hover:underline text-gray-400 hover:text-white">Help center</Link></li>
+                            </ul>
+                        </div>
                     </div>
 
+                    {/* Column 2: Our Company */}
                     <div>
-                        <h4 className="text-white font-bold mb-3">Our company</h4>
-                        <ul className="space-y-2">
-                            <li><Link href="#" className="hover:underline">About us</Link></li>
-                            <li><Link href="#" className="hover:underline">Careers</Link></li>
-                            <li><Link href="#" className="hover:underline">Press/media</Link></li>
-                            <li><Link href="#" className="hover:underline">Blog</Link></li>
+                        <h4 className="text-white font-bold mb-4">Our company</h4>
+                        <ul className="space-y-2 text-gray-400">
+                            <li><Link href="#" className="hover:underline hover:text-white">About us</Link></li>
+                            <li><Link href="#" className="hover:underline hover:text-white">Careers</Link></li>
+                            <li><Link href="#" className="hover:underline hover:text-white">Press/media</Link></li>
+                            <li><Link href="#" className="hover:underline hover:text-white">Investor relations</Link></li>
+                            <li><Link href="#" className="hover:underline hover:text-white">Special Stocks blog</Link></li>
+                            <li><Link href="#" className="hover:underline hover:text-white">Coupons</Link></li>
                         </ul>
                     </div>
 
+                    {/* Column 3: Browse */}
                     <div>
-                        <h4 className="text-white font-bold mb-3">Products</h4>
-                        <ul className="space-y-2">
-                            <li><Link href="/images" className="hover:underline">Images</Link></li>
-                            <li><Link href="/video" className="hover:underline">Video</Link></li>
-                            <li><Link href="/exclusive-images" className="hover:underline text-purple-400">Exclusive</Link></li>
+                        <h4 className="text-white font-bold mb-4">Browse</h4>
+                        <ul className="space-y-2 text-gray-400">
+                            <li><Link href="/images" className="hover:underline hover:text-white">Images</Link></li>
+                            <li><Link href="/video" className="hover:underline hover:text-white">Videos</Link></li>
+                            <li><Link href="#" className="hover:underline hover:text-white">Advanced Search</Link></li>
+                            <li><Link href="#" className="hover:underline hover:text-white">Free Assets</Link></li>
                         </ul>
                     </div>
 
+                    {/* Column 4: Products and services */}
                     <div>
-                        <h4 className="text-white font-bold mb-2">Legal</h4>
-                        <ul className="space-y-2">
-                            <li><Link href="#" className="hover:underline">Terms of service</Link></li>
-                            <li><Link href="#" className="hover:underline">Privacy policy</Link></li>
-                            <li><Link href="#" className="hover:underline">Cookie preferences</Link></li>
+                        <h4 className="text-white font-bold mb-4">Products and services</h4>
+                        <ul className="space-y-2 text-gray-400">
+                            <li><Link href="/images" className="hover:underline hover:text-white">Images</Link></li>
+                            <li><Link href="/video" className="hover:underline hover:text-white">Video</Link></li>
+                            <li><Link href="#" className="hover:underline hover:text-white">Music</Link></li>
+                            <li><Link href="#" className="hover:underline hover:text-white">Editorial</Link></li>
+                            <li><Link href="#" className="hover:underline hover:text-white">3D</Link></li>
+                            <li><Link href="#" className="hover:underline hover:text-white">AI solutions</Link></li>
                         </ul>
                     </div>
 
+                    {/* Column 5: Legal */}
                     <div>
-                        <h4 className="text-white font-bold mb-3">Contact us</h4>
-                        <ul className="space-y-2">
-                            <li><Link href="#" className="hover:underline">Help center</Link></li>
+                        <h4 className="text-white font-bold mb-4">Legal</h4>
+                        <ul className="space-y-2 text-gray-400">
+                            <li><Link href="#" className="hover:underline hover:text-white">Website terms of use</Link></li>
+                            <li><Link href="#" className="hover:underline hover:text-white">Terms of service</Link></li>
+                            <li><Link href="#" className="hover:underline hover:text-white">Privacy policy</Link></li>
+                            <li><Link href="#" className="hover:underline hover:text-white">Modern slavery statement</Link></li>
+                            <li><Link href="#" className="hover:underline hover:text-white">Patents</Link></li>
+                            <li><Link href="#" className="hover:underline hover:text-white">Cookie preferences</Link></li>
                         </ul>
                     </div>
                 </div>
 
-                <div className="mt-10 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 border-t border-gray-700 pt-6">
-                    <p className="mb-3">© 2025 Stock Media Platform. All rights reserved.</p>
+                {/* Bottom Footer Section */}
+                <div className="mt-16 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 border-t border-gray-800 pt-8 pb-8">
+                    <p className="mb-4 md:mb-0">© 2026 Special Stocks, Inc. All rights reserved.</p>
 
-                    <div className="flex gap-4 text-sm mt-4 md:mt-0 mb-5">
-                        <a href="https://www.facebook.com/Specialstocks" className="hover:text-white"><FaFacebook className="w-4.5 h-4.5" /></a>
-                        <a href="https://www.instagram.com/special_stocks/" className="hover:text-white"><FaInstagram className="w-4.5 h-4.5" /></a>
-                        <a href="https://www.linkedin.com/company/109615206" className="hover:text-white"><FaLinkedin className="w-4.5 h-4.5" /></a>
-                        <a href="http://www.youtube.com/@SpecialStocks" className="hover:text-white"><FaYoutube className="w-4.5 h-4.5" /></a>
+                    <div className="flex gap-6 text-xl">
+                        <a href="https://www.facebook.com/Specialstocks" target="_blank" className="hover:text-white transition"><FaFacebook /></a>
+                        <a href="https://www.instagram.com/special_stocks/" target="_blank" className="hover:text-white transition"><FaInstagram /></a>
+                        <a href="https://www.linkedin.com/company/109615206" target="_blank" className="hover:text-white transition"><FaLinkedin /></a>
+                        <a href="http://www.youtube.com/@SpecialStocks" target="_blank" className="hover:text-white transition"><FaYoutube /></a>
                     </div>
                 </div>
             </div>

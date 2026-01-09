@@ -126,7 +126,7 @@ export default function Navbar() {
                             <ChevronDown className="h-4 w-4 opacity-80" />
                         </Link>
 
-                        <Link href="/exclusive-images" className="hover:text-gray-300">
+                        <Link href="/exclusiveImages" className="hover:text-gray-300">
                             <span className="font-medium">Exclusive Images</span>
                         </Link>
                     </nav>
@@ -187,7 +187,7 @@ export default function Navbar() {
                         </Link>
 
                         <Link
-                            href="/exclusive-images"
+                            href="/exclusiveImages"
                             className="flex items-center justify-between py-3 border-b border-gray-100 hover:bg-gray-50 px-2 rounded"
                             onClick={() => setMobileOpen(false)}
                         >

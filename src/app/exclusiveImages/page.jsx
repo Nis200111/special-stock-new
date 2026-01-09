@@ -173,7 +173,7 @@ export default function ExclusiveImages() {
                             <p className="text-sm font-medium text-gray-700 group-hover:text-black">Backgrounds</p>
                         </Link>
 
-                        <Link href="/exclusive-images" className="flex items-center gap-3 hover:bg-gray-50 p-3 transition group">
+                        <Link href="/exclusiveImages" className="flex items-center gap-3 hover:bg-gray-50 p-3 transition group">
                             <div className="w-16 h-16 md:w-24 md:h-24 overflow-hidden relative bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform duration-300">
                                 <Crown className="w-8 h-8 md:w-10 md:h-10" />
                             </div>
