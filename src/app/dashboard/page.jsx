@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import {
     LayoutDashboard, Users, Image, Box,
     Layers, LogOut, Search, Bell, Check, X, Clock, DollarSign
@@ -19,12 +20,12 @@ const SpecialStocksDashboard = () => {
 
                 <nav className="flex-1 space-y-1">
                     <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-4 px-2">Menu</p>
-                    <SidebarItem icon={<LayoutDashboard size={18} />} label="Dashboard" active />
-                    <SidebarItem icon={<Users size={18} />} label="Users" />
-                    <SidebarItem icon={<Box size={18} />} label="Content" />
-                    <SidebarItem icon={<Image size={18} />} label="Gallery" />
-                    <SidebarItem icon={<Layers size={18} />} label="Exclusive" />
-                    <SidebarItem icon={<Image size={18} />} label="Collections" />
+                    <SidebarItem href="/dashboard" icon={<LayoutDashboard size={18} />} label="Dashboard" active />
+                    <SidebarItem href="/user" icon={<Users size={18} />} label="Users" />
+                    <SidebarItem href="/content" icon={<Box size={18} />} label="Content" />
+                    <SidebarItem href="#" icon={<Image size={18} />} label="Gallery" />
+                    <SidebarItem href="/exclusiveImages" icon={<Layers size={18} />} label="Exclusive" />
+                    <SidebarItem href="#" icon={<Image size={18} />} label="Collections" />
                 </nav>
 
                 <div className="mt-auto pt-6 border-t border-white/10">
@@ -164,11 +165,14 @@ const SpecialStocksDashboard = () => {
 };
 
 // Reusable Components
-const SidebarItem = ({ icon, label, active = false }) => (
-    <button className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-medium text-sm ${active ? 'bg-[#A3E635] text-[#0B1A13] shadow-lg shadow-[#A3E635]/20 font-bold' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}>
+const SidebarItem = ({ icon, label, href = "#", active = false }) => (
+    <Link
+        href={href}
+        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-medium text-sm ${active ? 'bg-[#A3E635] text-[#0B1A13] shadow-lg shadow-[#A3E635]/20 font-bold' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
+    >
         {icon}
         <span>{label}</span>
-    </button>
+    </Link>
 );
 
 const StatCard = ({ label, value, subtext, icon }) => (

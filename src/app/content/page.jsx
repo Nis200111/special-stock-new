@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import {
     LayoutDashboard, Users, Box, Image, Layers, LogOut,
     Search, Filter, Bell, Plus, Download, RefreshCw,
@@ -22,10 +23,11 @@ const ContentManagement = () => {
                 </div>
 
                 <nav className="flex-1 space-y-1">
-                    <SidebarItem icon={<LayoutDashboard size={18} />} label="Dashboard" />
-                    <SidebarItem icon={<Users size={18} />} label="Users" />
-                    <SidebarItem icon={<Box size={18} />} label="Content" active />
-                    <SidebarItem icon={<Image size={18} />} label="Gallery" />
+                    <SidebarItem href="/dashboard" icon={<LayoutDashboard size={18} />} label="Dashboard" />
+                    <SidebarItem href="/user" icon={<Users size={18} />} label="Users" />
+                    <SidebarItem href="/content" icon={<Box size={18} />} label="Content" active />
+                    <SidebarItem href="#" icon={<Image size={18} />} label="Gallery" />
+                    <SidebarItem href="/exclusiveImages" icon={<Layers size={18} />} label="Exclusive" />
                 </nav>
 
                 <div className="mt-auto pt-6 border-t border-white/10">
@@ -160,10 +162,13 @@ const ContentManagement = () => {
 
 // --- SUB-COMPONENTS ---
 
-const SidebarItem = ({ icon, label, active = false }) => (
-    <button className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-medium text-sm ${active ? 'bg-[#A3E635] text-[#0B1A13] font-bold shadow-lg shadow-[#A3E635]/20' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}>
+const SidebarItem = ({ icon, label, href = "#", active = false }) => (
+    <Link
+        href={href}
+        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-medium text-sm ${active ? 'bg-[#A3E635] text-[#0B1A13] font-bold shadow-lg shadow-[#A3E635]/20' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
+    >
         {icon} <span>{label}</span>
-    </button>
+    </Link>
 );
 
 const MiniStat = ({ label, value, color }) => (

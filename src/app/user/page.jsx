@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import {
     LayoutDashboard, Users, Box, Image, Layers, LogOut,
     Search, Filter, ChevronDown, MoreHorizontal, Download, RefreshCw,
@@ -37,11 +38,12 @@ const UserManagement = () => {
 
                 <nav className="flex-1 space-y-2">
                     <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-4 px-2">Menu</p>
-                    <SidebarItem icon={<LayoutDashboard size={20} />} label="Dashboard" />
+                    <SidebarItem href="/dashboard" icon={<LayoutDashboard size={20} />} label="Dashboard" />
                     {/* 'Users' is active to match current page */}
-                    <SidebarItem icon={<Users size={20} />} label="Users" active />
-                    <SidebarItem icon={<Box size={20} />} label="Content" />
-                    <SidebarItem icon={<Image size={20} />} label="Gallery" />
+                    <SidebarItem href="/user" icon={<Users size={20} />} label="Users" active />
+                    <SidebarItem href="/content" icon={<Box size={20} />} label="Content" />
+                    <SidebarItem href="#" icon={<Image size={20} />} label="Gallery" />
+                    <SidebarItem href="/exclusiveImages" icon={<Layers size={20} />} label="Exclusive" />
                 </nav>
 
                 <div className="mt-auto pt-6 border-t border-white/10">
@@ -233,17 +235,20 @@ const UserManagement = () => {
 
 // --- Sub-components for cleaner code ---
 
-const SidebarItem = ({ icon, label, active = false }) => {
+const SidebarItem = ({ icon, label, href = "#", active = false }) => {
     // Active state styling matching the target image's bright green
     const activeClasses = active
         ? "bg-[#A3E635] text-[#0B1A13] font-bold shadow-lg shadow-[#A3E635]/20"
         : "text-gray-400 hover:text-white hover:bg-white/5";
 
     return (
-        <button className={`flex w-full items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${activeClasses}`}>
+        <Link
+            href={href}
+            className={`flex w-full items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${activeClasses}`}
+        >
             {icon}
             <span className="text-sm font-medium">{label}</span>
-        </button>
+        </Link>
     );
 };
 
