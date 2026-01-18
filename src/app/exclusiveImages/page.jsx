@@ -60,6 +60,21 @@ export default function ExclusiveImages() {
 
     return (
         <div className="bg-white text-gray-900">
+
+            {/* Top Announcement */}
+            <div className="bg-[#3477a2] text-white text-center text-small sm:text-sm py-2 sm:py-3 px-2 ">
+                <span className="block sm:inline tracking-[0.03rem]">
+                    Access our exclusive premium image collection with your account.
+                </span>
+                <Link
+                    href="/register"
+                    className="bg-white text-black px-2.5 py-2.5 rounded-full ml-0 sm:ml-2 mt-2 sm:mt-0 text-xs font-bold hover:bg-gray-100 transition-colors inline-block"
+                >
+                    Sign up now
+                </Link>
+            </div>
+
+
             <Navbar />
 
             {/* HERO */}
