@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Inter } from "next/font/google";
 import styles from "./login.module.css";
 
@@ -11,8 +12,60 @@ const inter = Inter({
 });
 
 export default function LoginPage() {
+    const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
     const [logoFailed, setLogoFailed] = useState(false);
+    const [formData, setFormData] = useState({
+        email: "",
+        password: ""
+    });
+    const [error, setError] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+        // Clear error when user types
+        if (error) setError("");
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setIsLoading(true);
+        setError("");
+
+        try {
+            const res = await fetch("http://localhost:5000/api/customers/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.message || "Login failed");
+            }
+
+            // Store user data
+            localStorage.setItem("user", JSON.stringify(data));
+            localStorage.setItem("token", data.accessToken);
+            localStorage.setItem("userName", data.firstName);
+            if (data.role) localStorage.setItem("userRole", data.role);
+
+            // Redirect to home
+            router.push("/");
+
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return (
         <div className={`${styles.page} ${inter.className}`}>
@@ -46,8 +99,22 @@ export default function LoginPage() {
                         <p className={styles.subtitle}>Sign in to access your account</p>
                     </div>
 
+
                     {/* Form */}
-                    <form className={styles.form} method="POST" action="">
+                    <form className={styles.form} onSubmit={handleSubmit}>
+                        {error && (
+                            <div style={{
+                                color: "#ef4444",
+                                background: "#fee2e2",
+                                padding: "0.75rem",
+                                borderRadius: "0.5rem",
+                                marginBottom: "1rem",
+                                fontSize: "0.875rem",
+                                textAlign: "center"
+                            }}>
+                                {error}
+                            </div>
+                        )}
                         {/* Email */}
                         <div className={styles.field}>
                             <label htmlFor="email" className={styles.label}>
@@ -70,6 +137,8 @@ export default function LoginPage() {
                                     className={styles.input}
                                     placeholder="Enter your email address"
                                     autoComplete="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
                                 />
                             </div>
                         </div>
@@ -97,6 +166,8 @@ export default function LoginPage() {
                                     className={`${styles.input} ${styles.inputWithRight}`}
                                     placeholder="Enter your password"
                                     autoComplete="current-password"
+                                    value={formData.password}
+                                    onChange={handleChange}
                                 />
 
                                 <button
@@ -128,16 +199,22 @@ export default function LoginPage() {
                         </div>
 
                         {/* Submit */}
-                        <button type="submit" className={styles.signInBtn}>
-                            <span className={styles.btnIcon} aria-hidden="true">
-                                <svg viewBox="0 0 24 24" className={styles.iconSvgWhite}>
-                                    <path
-                                        d="M10 17v-3H3v-4h7V7l5 5-5 5zm9-14h-8v2h8v14h-8v2h8a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z"
-                                        fill="currentColor"
-                                    />
-                                </svg>
-                            </span>
-                            Sign In
+                        <button type="submit" className={styles.signInBtn} disabled={isLoading}>
+                            {isLoading ? (
+                                "Signing In..."
+                            ) : (
+                                <>
+                                    <span className={styles.btnIcon} aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" className={styles.iconSvgWhite}>
+                                            <path
+                                                d="M10 17v-3H3v-4h7V7l5 5-5 5zm9-14h-8v2h8v14h-8v2h8a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z"
+                                                fill="currentColor"
+                                            />
+                                        </svg>
+                                    </span>
+                                    Sign In
+                                </>
+                            )}
                         </button>
                     </form>
 
@@ -176,7 +253,7 @@ export default function LoginPage() {
                         <p>
                             Don&apos;t have an account?{" "}
                             <Link href="/register" className={styles.linkBlue}>
-                                Create one now
+                                Create new one
                             </Link>
                         </p>
                     </div>

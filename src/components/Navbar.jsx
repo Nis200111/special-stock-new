@@ -2,17 +2,26 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Menu, X, Globe, Heart, ShoppingCart, ChevronDown } from "lucide-react"
+import { Menu, X, Globe, Heart, ShoppingCart, ChevronDown, User } from "lucide-react"
 import { FaCartShopping } from "react-icons/fa6";
 import IMGLOGO from "../assets/speciallogo.png";
 
 export default function Navbar() {
     const [mobileOpen, setMobileOpen] = useState(false);
 
+    const [userName, setUserName] = useState(null);
+    const [userRole, setUserRole] = useState(null);
+
+    React.useEffect(() => {
+        const storedName = localStorage.getItem("userName");
+        if (storedName) setUserName(storedName);
+
+        const storedRole = localStorage.getItem("userRole");
+        if (storedRole) setUserRole(storedRole);
+    }, []);
+
     return (
         <>
-
-
             {/* Main Navbar */}
             <header className="text-white px-4 sm:px-6 py-3 bg-[#131313] relative">
                 <div className="flex items-center justify-between w-full">
@@ -55,12 +64,40 @@ export default function Navbar() {
                             <FaCartShopping className="h-5 w-5 hover:text-gray-300 cursor-pointer" />
                         </Link>
 
-                        <Link
-                            href="/login"
-                            className="bg-white text-black px-3 sm:px-4 py-2 sm:py-2.5 rounded-md font-bold text-sm hover:bg-gray-100 transition-colors hidden sm:flex"
-                        >
-                            Log in
-                        </Link>
+                        {/* Login Button or Dashboard Icon */}
+                        {userName ? (
+                            <>
+                                {userRole === 'admin' ? (
+                                    <Link
+                                        href="/admin/dashboard"
+                                        className="bg-red-600 text-white px-4 sm:px-6 py-2 rounded-md font-bold text-sm hover:bg-red-700 transition-colors hidden sm:flex"
+                                    >
+                                        Admin Panel
+                                    </Link>
+                                ) : userRole === 'seller' ? (
+                                    <Link
+                                        href="/seller/dashboard"
+                                        className="bg-blue-600 text-white px-4 sm:px-6 py-2 rounded-md font-bold text-sm hover:bg-blue-700 transition-colors hidden sm:flex"
+                                    >
+                                        Seller Dashboard
+                                    </Link>
+                                ) : (
+                                    <Link
+                                        href="/dashboard"
+                                        className="bg-white text-black px-4 sm:px-6 py-2 rounded-md font-bold text-sm hover:bg-gray-100 transition-colors hidden sm:flex"
+                                    >
+                                        Dashboard
+                                    </Link>
+                                )}
+                            </>
+                        ) : (
+                            <Link
+                                href="/login"
+                                className="bg-white text-black px-4 sm:px-6 py-2 rounded-xl font-bold text-sm hover:bg-gray-100 transition-colors hidden sm:flex"
+                            >
+                                Log in
+                            </Link>
+                        )}
                     </div>
                 </div>
 
@@ -186,13 +223,25 @@ export default function Navbar() {
                     </div>
 
                     <div className="mt-8 pt-6 border-t border-gray-200">
-                        <Link
-                            href="/login"
-                            className="block w-full bg-gray-100 text-gray-900 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors text-center"
-                            onClick={() => setMobileOpen(false)}
-                        >
-                            Log in
-                        </Link>
+                        {!userName && (
+                            <Link
+                                href="/login"
+                                className="block w-full bg-gray-100 text-gray-900 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors text-center"
+                                onClick={() => setMobileOpen(false)}
+                            >
+                                Log in
+                            </Link>
+                        )}
+                        {/* Optionally add Dashboard link for mobile too if user is logged in */}
+                        {userName && (
+                            <Link
+                                href="/dashboard"
+                                className="block w-full bg-gray-100 text-gray-900 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors text-center"
+                                onClick={() => setMobileOpen(false)}
+                            >
+                                Dashboard
+                            </Link>
+                        )}
                     </div>
                 </div>
             </aside>

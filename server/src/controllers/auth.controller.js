@@ -15,7 +15,8 @@ exports.registerCustomer = async (req, res) => {
             lastName: req.body.lastName,
             email: req.body.email,
             phone: req.body.phone,
-            password: bcrypt.hashSync(req.body.password, 8)
+            password: bcrypt.hashSync(req.body.password, 8),
+            role: req.body.role || "buyer"
         });
 
         res.send({ message: "Customer registered successfully!" });
@@ -49,7 +50,7 @@ exports.loginCustomer = async (req, res) => {
             });
         }
 
-        const token = jwt.sign({ id: customer.id, role: 'customer' }, config.JWT_SECRET, {
+        const token = jwt.sign({ id: customer.id, role: customer.role }, config.JWT_SECRET, {
             expiresIn: 86400 // 24 hours
         });
 
@@ -58,6 +59,7 @@ exports.loginCustomer = async (req, res) => {
             firstName: customer.firstName,
             lastName: customer.lastName,
             email: customer.email,
+            role: customer.role,
             accessToken: token
         });
     } catch (err) {

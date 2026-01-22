@@ -20,6 +20,7 @@ import SpecialGraphicsLogo from "../assets/SPecialGraphgics .png";
 // Re-export Navbar and Footer which remain in separate files
 export { default as Navbar } from './Navbar';
 export { default as Footer } from './Footer';
+export { default as TopBanner } from './TopBanner';
 
 // Hero Component
 export const Hero = () => {

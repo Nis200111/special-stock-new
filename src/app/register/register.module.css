@@ -1,0 +1,351 @@
+/* register.module.css */
+.page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1e3a8a 0%, #dc2626 100%);
+    /* Blue to Red gradient */
+    padding: 20px;
+}
+
+.card {
+    background: white;
+    width: 100%;
+    max-width: 480px;
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    text-align: center;
+}
+
+.badgeContainer {
+    margin-bottom: 15px;
+}
+
+.badge {
+    background-color: #3b82f6;
+    color: white;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.logoContainer {
+    margin-bottom: 20px;
+}
+
+.logoText {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #111827;
+}
+
+.logoText span {
+    font-weight: 400;
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    color: #6b7280;
+    font-size: 0.95rem;
+    margin-bottom: 30px;
+}
+
+.form {
+    text-align: left;
+}
+
+.field {
+    margin-bottom: 20px;
+}
+
+.label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+}
+
+.inputWrap {
+    position: relative;
+}
+
+.input {
+    width: 100%;
+    padding: 12px 16px 12px 45px;
+    /* Space for left icon */
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    color: #111827;
+    transition: border-color 0.2s;
+    outline: none;
+}
+
+.input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.inputWithRight {
+    padding-right: 45px;
+}
+
+.leftIcon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    display: flex;
+}
+
+.rightIconBtn {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    display: flex;
+}
+
+.iconSvg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Buyer Account Box Style */
+.accountTypeBox {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #e5e7eb;
+    background-color: #f9fafb;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.accountInfo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.cartIconBg {
+    background-color: #eff6ff;
+    color: #3b82f6;
+    padding: 8px;
+    border-radius: 8px;
+    display: flex;
+}
+
+.accountTitle {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #1f2937;
+    display: block;
+}
+
+.accountDesc {
+    font-size: 0.75rem;
+    color: #6b7280;
+    display: block;
+    margin-top: 2px;
+}
+
+.checkIcon {
+    color: #10b981;
+    /* Green check */
+    width: 24px;
+    height: 24px;
+}
+
+/* Password Requirements List */
+.reqList {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0 0 0;
+}
+
+.reqItem {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.bullet {
+    width: 4px;
+    height: 4px;
+    background-color: #9ca3af;
+    border-radius: 50%;
+}
+
+/* Checkbox */
+.checkboxRow {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 24px;
+    margin-top: 10px;
+}
+
+.checkbox {
+    margin-top: 4px;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.checkboxLabel {
+    font-size: 0.85rem;
+    color: #4b5563;
+    line-height: 1.4;
+}
+
+.linkBlue {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* Submit Button */
+.submitBtn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(90deg, #ef4444 0%, #b91c1c 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: opacity 0.2s;
+}
+
+.submitBtn:hover {
+    opacity: 0.9;
+}
+
+/* Seller Section */
+.sellerSection {
+    margin-top: 25px;
+    border-top: 1px solid #f3f4f6;
+    padding-top: 20px;
+}
+
+.sellerText {
+    font-size: 0.9rem;
+    color: #4b5563;
+    margin-bottom: 12px;
+}
+
+/* register.module.css */
+
+.sellerBtn {
+    /* පරණ display: inline-block; එක වෙනුවට මේ ටික දාන්න */
+    display: flex;
+    /* Flexbox පාවිච්චි කරන්න */
+    flex-direction: column;
+    /* අයිතම එකක් යට එකක් පෙළගස්වන්න */
+    align-items: center;
+    /* මැදට (Horizontally) ගන්න */
+    justify-content: center;
+    /* මැදට (Vertically) ගන්න */
+
+    /* අනිත් styles එහෙමම තියන්න හෝ අවශ්‍ය විදියට වෙනස් කරන්න */
+    background-color: #4b5563;
+    /* Image 1 එකේ පාටට සමානයි */
+    color: white;
+    padding: 12px 30px;
+    /* Padding එක පොඩ්ඩක් වැඩි කරා বক্স එක ලොකු වෙන්න */
+    border-radius: 8px;
+    text-decoration: none;
+    margin-bottom: 20px;
+
+    /* ෆොන්ට් එක Image 1 එකේ වගේ පොඩි සහ bold කරන්න */
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+/* අයිකන් එක සහ ටෙක්ස්ට් එක අතර පරතරයක් තියන්න මේක එකතු කරන්න */
+.sellerBtn svg {
+    margin-bottom: 6px;
+    /* අයිකන් එකට යටින් ඉඩක් */
+    margin-right: 0 !important;
+    /* කලින් දාපු දකුණු පැත්තේ ඉඩ අයින් කරන්න */
+}
+
+/* Divider */
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    color: #9ca3af;
+    font-size: 0.85rem;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.divider span {
+    padding: 0 10px;
+}
+
+/* Google Button */
+.googleBtn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    color: #374151;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.footerLinks {
+    margin-top: 20px;
+    font-size: 0.9rem;
+}
+
+.backLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 15px;
+    color: #6b7280;
+    font-size: 0.85rem;
+    text-decoration: none;
+}
