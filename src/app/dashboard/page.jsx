@@ -29,6 +29,12 @@ const AdminDashboard = () => {
     const [previewUrl, setPreviewUrl] = useState(null);
     const [isDragging, setIsDragging] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
+    const [stats, setStats] = useState({
+        pending: 0,
+        approved: 0,
+        rejected: 0,
+        total: 0
+    });
     const [uploadSuccess, setUploadSuccess] = useState(false);
     const [uploadError, setUploadError] = useState('');
     const [uploadedImages, setUploadedImages] = useState([]);
@@ -43,6 +49,9 @@ const AdminDashboard = () => {
             router.push('/buyer-dashboard');
         }
 
+        // Fetch Admin Stats
+        fetchStats();
+
         // Load uploaded images from localStorage
         const storedImages = localStorage.getItem('uploadedImages');
         if (storedImages) {
@@ -53,6 +62,21 @@ const AdminDashboard = () => {
             }
         }
     }, [router]);
+
+    const fetchStats = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch('http://localhost:5000/api/admin/stats', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const data = await response.json();
+            if (data.success) {
+                setStats(data.data);
+            }
+        } catch (error) {
+            console.error('Failed to fetch stats:', error);
+        }
+    };
 
     const handleLogout = () => {
         localStorage.removeItem("userName");
@@ -188,6 +212,7 @@ const AdminDashboard = () => {
                     <p className="text-xs text-gray-500 font-bold uppercase mb-4 px-4">MENU</p>
                     <div className="space-y-1">
                         <SidebarItem href="/dashboard" icon={<LayoutDashboard size={20} />} label="Dashboard" active />
+                        <SidebarItem href="/dashboard/image-approval" icon={<CheckCircle size={20} />} label="Image Approval" />
                         <SidebarItem href="/profile" icon={<UserCircle size={20} />} label="Profile" />
                         <SidebarItem href="/content" icon={<Box size={20} />} label="Content" />
                         <SidebarItem href="/gallery" icon={<LucideImage size={20} />} label="Gallery" />
@@ -208,7 +233,7 @@ const AdminDashboard = () => {
                     </div>
                     <div className="flex items-center gap-2 bg-red-600 text-white px-3 py-2 rounded-lg cursor-pointer hover:bg-red-700">
                         <AlertTriangle size={16} />
-                        <span className="text-sm font-bold">1 Issue</span>
+                        <span className="text-sm font-bold">{stats.pending} Issue{stats.pending !== 1 && 's'}</span>
                     </div>
                 </div>
             </aside>
@@ -276,24 +301,24 @@ const AdminDashboard = () => {
                                 <AlertTriangle size={24} />
                             </div>
                             <div>
-                                <h3 className="text-amber-900 font-bold text-base">1 item(s) awaiting review</h3>
-                                <p className="text-amber-700 text-sm">1 regular assets + 0 exclusive images</p>
+                                <h3 className="text-amber-900 font-bold text-base">{stats.pending} item(s) awaiting review</h3>
+                                <p className="text-amber-700 text-sm">Action required to make them visible on the site.</p>
                             </div>
                         </div>
                         <div className="flex gap-3">
+                            <Link
+                                href="/dashboard/image-approval"
+                                className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 shadow-lg hover:shadow-xl"
+                            >
+                                <CheckCircle size={20} />
+                                Review Now
+                            </Link>
                             <Link
                                 href="/dashboard/manage-sellers"
                                 className="bg-gray-900 hover:bg-gray-800 text-white px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 shadow-lg hover:shadow-xl"
                             >
                                 <Users size={20} />
                                 Manage Sellers
-                            </Link>
-                            <Link
-                                href="/dashboard/add-seller"
-                                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 shadow-lg hover:shadow-xl"
-                            >
-                                <UserPlus size={20} />
-                                Add Seller
                             </Link>
                         </div>
                     </div>
@@ -304,7 +329,7 @@ const AdminDashboard = () => {
                             <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
                                 <LucideImage size={18} className="text-red-600" />
                             </div>
-                            <h3 className="text-lg font-bold text-gray-900">Upload New Image</h3>
+                            <h3 className="text-lg font-bold text-gray-900">Upload New Image (Admin)</h3>
                         </div>
 
                         <div
@@ -393,18 +418,18 @@ const AdminDashboard = () => {
                                 </div>
                             </div>
                             <p className="text-sm text-gray-600 mb-1">Pending Review</p>
-                            <p className="text-3xl font-bold text-gray-900">1</p>
+                            <p className="text-3xl font-bold text-gray-900">{stats.pending}</p>
                         </div>
 
-                        {/* Exclusive Pending */}
+                        {/* Approved */}
                         <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
                             <div className="flex items-center justify-between mb-4">
-                                <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                                    <LucideImage size={24} className="text-purple-600" />
+                                <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                                    <LucideImage size={24} className="text-green-600" />
                                 </div>
                             </div>
-                            <p className="text-sm text-gray-600 mb-1">Exclusive Pending</p>
-                            <p className="text-3xl font-bold text-gray-900">0</p>
+                            <p className="text-sm text-gray-600 mb-1">Total Approved</p>
+                            <p className="text-3xl font-bold text-gray-900">{stats.approved}</p>
                         </div>
 
                         {/* Total Users */}
@@ -414,19 +439,19 @@ const AdminDashboard = () => {
                                     <Users size={24} className="text-white" />
                                 </div>
                             </div>
-                            <p className="text-sm text-gray-600 mb-1">Total Users</p>
-                            <p className="text-3xl font-bold text-gray-900">14</p>
+                            <p className="text-sm text-gray-600 mb-1">Total Uploads</p>
+                            <p className="text-3xl font-bold text-gray-900">{stats.total}</p>
                         </div>
 
                         {/* Total Uploaded */}
                         <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
                             <div className="flex items-center justify-between mb-4">
-                                <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                                    <CheckCircle size={24} className="text-green-600" />
+                                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                                    <CheckCircle size={24} className="text-blue-600" />
                                 </div>
                             </div>
-                            <p className="text-sm text-gray-600 mb-1">Total Uploaded</p>
-                            <p className="text-3xl font-bold text-gray-900">{uploadedImages.length}</p>
+                            <p className="text-sm text-gray-600 mb-1">Rejected</p>
+                            <p className="text-3xl font-bold text-gray-900">{stats.rejected}</p>
                         </div>
                     </div>
 
