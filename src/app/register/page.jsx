@@ -258,7 +258,7 @@ export default function RegisterPage() {
                 {/* Footer Section */}
                 <div className={styles.sellerSection}>
                     <p className={styles.sellerText}>Want to sell your creative content instead?</p>
-                    <Link href="/register/seller" className={styles.sellerBtn}>
+                    <Link href="/seller" className={styles.sellerBtn}>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="20"

@@ -69,8 +69,8 @@ export default function Navbar() {
                             <>
                                 {userRole === 'admin' ? (
                                     <Link
-                                        href="/admin/dashboard"
-                                        className="bg-red-600 text-white px-4 sm:px-6 py-2 rounded-md font-bold text-sm hover:bg-red-700 transition-colors hidden sm:flex"
+                                        href="/dashboard"
+                                        className="bg-white text-black px-4 sm:px-6 py-2 rounded-md font-bold text-sm hover:bg-gray-100 transition-colors hidden sm:flex"
                                     >
                                         Admin Panel
                                     </Link>

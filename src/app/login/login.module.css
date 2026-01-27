@@ -264,6 +264,11 @@
     height: 20px;
 }
 
+.googleBtnWrapper {
+    width: 100%;
+}
+
+
 .register {
     text-align: center;
     margin-top: 22px;

@@ -4,21 +4,55 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
-    LayoutDashboard, Users, Image, Box,
-    Layers, LogOut, Search, Bell, Check, X, Clock, DollarSign, Heart, Package
+    LayoutDashboard, Users, Image as LucideImage, Box,
+    Layers, LogOut, Search, Bell, AlertTriangle, UserCircle, CheckCircle, XCircle, UserPlus
 } from 'lucide-react';
 
-const DashboardPage = () => {
+// Sidebar Item Component
+const SidebarItem = ({ href, icon, label, active = false }) => (
+    <Link
+        href={href}
+        className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${active
+            ? 'bg-red-600 text-white shadow-lg shadow-red-600/30'
+            : 'text-gray-400 hover:text-white hover:bg-gray-800'
+            }`}
+    >
+        {icon}
+        <span className="font-medium">{label}</span>
+    </Link>
+);
+
+const AdminDashboard = () => {
     const router = useRouter();
-    const [role, setRole] = useState('buyer');
     const [userName, setUserName] = useState('User');
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState(null);
+    const [isDragging, setIsDragging] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
+    const [uploadSuccess, setUploadSuccess] = useState(false);
+    const [uploadError, setUploadError] = useState('');
+    const [uploadedImages, setUploadedImages] = useState([]);
 
     useEffect(() => {
         const storedRole = localStorage.getItem("userRole");
         const storedName = localStorage.getItem("userName");
-        if (storedRole) setRole(storedRole);
         if (storedName) setUserName(storedName);
-    }, []);
+
+        // Redirect buyers to buyer dashboard
+        if (storedRole === 'buyer') {
+            router.push('/buyer-dashboard');
+        }
+
+        // Load uploaded images from localStorage
+        const storedImages = localStorage.getItem('uploadedImages');
+        if (storedImages) {
+            try {
+                setUploadedImages(JSON.parse(storedImages));
+            } catch (e) {
+                console.error('Error loading images:', e);
+            }
+        }
+    }, [router]);
 
     const handleLogout = () => {
         localStorage.removeItem("userName");
@@ -28,221 +62,404 @@ const DashboardPage = () => {
         router.push("/login");
     };
 
-    // ADMIN VIEW
-    if (role === 'admin') {
-        return (
-            <div className="flex min-h-screen bg-[#F3F4F6] font-sans text-[#1A1C1E]">
-                {/* Side Navigation - Admin */}
-                <aside className="w-64 bg-[#0d3b66] text-white flex flex-col p-6 sticky top-0 h-screen">
-                    <div className="flex items-center gap-2 mb-10 px-2">
-                        <div className="w-8 h-8 bg-[#1e5a8e] rounded-lg flex items-center justify-center">
-                            <Layers className="text-white" size={20} />
-                        </div>
-                        <span className="text-xl font-bold tracking-tight">Special Stocks</span>
-                    </div>
+    // Image upload handlers
+    const handleFileSelect = (e) => {
+        const file = e.target.files[0];
+        if (file && file.type.startsWith('image/')) {
+            setSelectedFile(file);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreviewUrl(reader.result);
+            };
+            reader.readAsDataURL(file);
+            setUploadError('');
+            setUploadSuccess(false);
+        }
+    };
 
-                    <nav className="flex-1 space-y-1">
-                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-4 px-2">Admin Menu</p>
-                        <SidebarItem href="/dashboard" icon={<LayoutDashboard size={18} />} label="Dashboard" active isAdmin />
-                        <SidebarItem href="/admin/users" icon={<Users size={18} />} label="Manage Users" isAdmin />
-                        <SidebarItem href="/admin/products" icon={<Package size={18} />} label="Manage Products" isAdmin />
-                        <SidebarItem href="/admin/sales" icon={<DollarSign size={18} />} label="View Sales" isAdmin />
-                        <SidebarItem href="/content" icon={<Box size={18} />} label="Content" isAdmin />
-                        <SidebarItem href="/exclusiveImages" icon={<Layers size={18} />} label="Exclusive" isAdmin />
-                    </nav>
+    const handleDragOver = (e) => {
+        e.preventDefault();
+        setIsDragging(true);
+    };
 
-                    <div className="mt-auto pt-6 border-t border-white/10">
-                        <div className="flex items-center gap-3 px-2 mb-6">
-                            <div className="w-10 h-10 rounded-full bg-[#1e5a8e] flex items-center justify-center text-white font-bold">
-                                {userName.charAt(0).toUpperCase()}
-                            </div>
-                            <div>
-                                <p className="text-sm font-bold">{userName}</p>
-                                <p className="text-[10px] text-gray-300 font-mono">Administrator</p>
-                            </div>
-                        </div>
-                        <button
-                            onClick={handleLogout}
-                            className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors px-2 cursor-pointer w-full text-left"
-                            type="button"
-                        >
-                            <LogOut size={18} />
-                            <span className="text-sm font-medium">Logout</span>
-                        </button>
-                    </div>
-                </aside>
+    const handleDragLeave = (e) => {
+        e.preventDefault();
+        setIsDragging(false);
+    };
 
-                {/* Main Content - Admin */}
-                <main className="flex-1 overflow-y-auto">
-                    <header className="px-8 py-5 bg-[#0d3b66] text-white border-b border-[#1e5a8e] flex justify-between items-center sticky top-0 z-10">
-                        <div>
-                            <h1 className="text-2xl font-bold">Admin Control Panel</h1>
-                            <p className="text-sm text-gray-200 mt-1">Manage your platform</p>
-                        </div>
-                        <div className="flex items-center gap-4">
-                            <div className="relative">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300" size={16} />
-                                <input
-                                    type="text"
-                                    placeholder="Search..."
-                                    className="pl-10 pr-4 py-2 bg-[#1e5a8e] border-none rounded-full text-sm w-64 text-white placeholder-gray-300 focus:ring-2 focus:ring-white"
-                                />
-                            </div>
-                            <button className="p-2 bg-[#1e5a8e] rounded-full text-white hover:bg-[#2a6ba8]">
-                                <Bell size={18} />
-                            </button>
-                        </div>
-                    </header>
+    const handleDrop = (e) => {
+        e.preventDefault();
+        setIsDragging(false);
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('image/')) {
+            setSelectedFile(file);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreviewUrl(reader.result);
+            };
+            reader.readAsDataURL(file);
+            setUploadError('');
+            setUploadSuccess(false);
+        }
+    };
 
-                    <div className="p-8 space-y-8">
-                        {/* Admin Action Cards */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <Link href="/admin/users" className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow flex flex-col items-center group">
-                                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                    <Users size={32} className="text-white" />
-                                </div>
-                                <span className="font-bold text-lg text-gray-800">Manage Users</span>
-                                <span className="text-sm text-gray-500 mt-2">View and manage all users</span>
-                            </Link>
+    const handleClearFile = () => {
+        setSelectedFile(null);
+        setPreviewUrl(null);
+        setUploadError('');
+        setUploadSuccess(false);
+    };
 
-                            <Link href="/admin/products" className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow flex flex-col items-center group">
-                                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                    <Package size={32} className="text-white" />
-                                </div>
-                                <span className="font-bold text-lg text-gray-800">Manage Products</span>
-                                <span className="text-sm text-gray-500 mt-2">Add, edit, or remove products</span>
-                            </Link>
+    const handleUpload = async () => {
+        if (!selectedFile) return;
 
-                            <Link href="/admin/sales" className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow flex flex-col items-center group">
-                                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                    <DollarSign size={32} className="text-white" />
-                                </div>
-                                <span className="font-bold text-lg text-gray-800">View Sales</span>
-                                <span className="text-sm text-gray-500 mt-2">Track revenue and analytics</span>
-                            </Link>
-                        </div>
+        setIsUploading(true);
+        setUploadError('');
+        setUploadSuccess(false);
 
-                        {/* Stats Overview */}
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                            <StatCard label="Total Users" value="156" icon={<Users className="text-blue-500" />} />
-                            <StatCard label="Total Products" value="342" icon={<Package className="text-purple-500" />} />
-                            <StatCard label="Revenue" value="$12,450" icon={<DollarSign className="text-green-500" />} />
-                            <StatCard label="Pending" value="8" icon={<Clock className="text-orange-500" />} />
-                        </div>
-                    </div>
-                </main>
-            </div>
-        );
-    }
+        try {
+            const formData = new FormData();
+            formData.append('image', selectedFile);
+            formData.append('title', selectedFile.name.split('.')[0]);
+            formData.append('uploadedBy', userName);
 
-    // BUYER VIEW (DEFAULT)
+            const token = localStorage.getItem('token');
+
+            const response = await fetch('http://localhost:5000/api/images/upload', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
+            });
+
+            if (!response.ok) {
+                const data = await response.json();
+                throw new Error(data.message || 'Upload failed');
+            }
+
+            const data = await response.json();
+            console.log('Upload successful:', data);
+
+            // Success!
+            setUploadSuccess(true);
+
+            // Add to uploaded images list
+            const newImage = {
+                id: Date.now(),
+                name: selectedFile.name,
+                size: selectedFile.size,
+                uploadDate: new Date().toISOString(),
+                preview: previewUrl
+            };
+
+            const updatedImages = [newImage, ...uploadedImages];
+            setUploadedImages(updatedImages);
+            localStorage.setItem('uploadedImages', JSON.stringify(updatedImages));
+
+            // Clear form after 2 seconds
+            setTimeout(() => {
+                handleClearFile();
+                setUploadSuccess(false);
+            }, 2000);
+
+        } catch (error) {
+            console.error('Upload error:', error);
+            setUploadError(error.message || 'Failed to upload image. Please try again.');
+        } finally {
+            setIsUploading(false);
+        }
+    };
+
     return (
-        <div className="flex min-h-screen bg-[#F3F4F6] font-sans text-[#1A1C1E]">
-            {/* Side Navigation - Buyer */}
-            <aside className="w-64 bg-[#1A0505] text-white flex flex-col p-6 sticky top-0 h-screen">
-                <div className="flex items-center gap-2 mb-10 px-2">
-                    <div className="w-8 h-8 bg-[#EF4444] rounded-lg flex items-center justify-center">
-                        <Layers className="text-white" size={20} />
+        <div className="flex min-h-screen bg-gray-50">
+            {/* Left Sidebar */}
+            <aside className="w-64 bg-gray-900 text-white flex flex-col fixed h-screen">
+                {/* Logo */}
+                <div className="flex items-center gap-3 p-6 border-b border-gray-800">
+                    <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
+                        <Layers className="text-white" size={24} />
                     </div>
-                    <span className="text-xl font-bold tracking-tight">Special Stocks</span>
+                    <span className="text-xl font-bold">Special Stocks</span>
                 </div>
 
-                <nav className="flex-1 space-y-1">
-                    <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-4 px-2">Menu</p>
-                    <SidebarItem href="/dashboard" icon={<LayoutDashboard size={18} />} label="Dashboard" active />
-                    <SidebarItem href="/user" icon={<Users size={18} />} label="Profile" />
-                    <SidebarItem href="/content" icon={<Box size={18} />} label="Content" />
-                    <SidebarItem href="/images" icon={<Image size={18} />} label="Gallery" />
-                    <SidebarItem href="/exclusiveImages" icon={<Layers size={18} />} label="Exclusive" />
-                </nav>
+                {/* Menu */}
+                <div className="flex-1 px-4 py-6">
+                    <p className="text-xs text-gray-500 font-bold uppercase mb-4 px-4">MENU</p>
+                    <div className="space-y-1">
+                        <SidebarItem href="/dashboard" icon={<LayoutDashboard size={20} />} label="Dashboard" active />
+                        <SidebarItem href="/profile" icon={<UserCircle size={20} />} label="Profile" />
+                        <SidebarItem href="/content" icon={<Box size={20} />} label="Content" />
+                        <SidebarItem href="/gallery" icon={<LucideImage size={20} />} label="Gallery" />
+                        <SidebarItem href="/exclusive" icon={<Layers size={20} />} label="Exclusive" />
+                    </div>
+                </div>
 
-                <div className="mt-auto pt-6 border-t border-white/10">
-                    <div className="flex items-center gap-3 px-2 mb-6">
-                        <div className="w-10 h-10 rounded-full bg-[#EF4444] flex items-center justify-center text-white font-bold">
-                            {userName.charAt(0).toUpperCase()}
+                {/* User Section at Bottom */}
+                <div className="p-4 border-t border-gray-800">
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center">
+                            <span className="text-white font-bold text-lg">{userName.charAt(0).toUpperCase()}</span>
                         </div>
-                        <div>
-                            <p className="text-sm font-bold">{userName}</p>
-                            <p className="text-[10px] text-gray-400 font-mono">Buyer Account</p>
+                        <div className="flex-1">
+                            <p className="text-sm font-bold text-white">{userName}</p>
+                            <p className="text-xs text-gray-400">Admin Account</p>
                         </div>
                     </div>
-                    <button
-                        onClick={handleLogout}
-                        className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors px-2 cursor-pointer w-full text-left"
-                        type="button"
-                    >
-                        <LogOut size={18} />
-                        <span className="text-sm font-medium">Logout</span>
-                    </button>
+                    <div className="flex items-center gap-2 bg-red-600 text-white px-3 py-2 rounded-lg cursor-pointer hover:bg-red-700">
+                        <AlertTriangle size={16} />
+                        <span className="text-sm font-bold">1 Issue</span>
+                    </div>
                 </div>
             </aside>
 
-            {/* Main Content - Buyer */}
-            <main className="flex-1 overflow-y-auto">
-                <header className="px-8 py-5 bg-white border-b border-gray-100 flex justify-between items-center sticky top-0 z-10">
-                    <div>
-                        <h1 className="text-2xl font-bold">User Dashboard</h1>
-                        <p className="text-sm text-gray-500 mt-1">Welcome back, {userName}!</p>
+            {/* Main Content */}
+            <main className="flex-1 ml-64 bg-gray-50">
+                {/* Top Header */}
+                <header className="bg-white border-b border-gray-200 px-8 py-4 sticky top-0 z-10">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
+                            <p className="text-sm text-gray-500 mt-1">Welcome back, {userName}!</p>
+                        </div>
+                        <div className="flex items-center gap-4">
+                            <div className="relative">
+                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                                <input
+                                    type="text"
+                                    placeholder="Search..."
+                                    className="pl-12 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm w-80 text-gray-700 focus:ring-2 focus:ring-red-500/20 outline-none"
+                                />
+                            </div>
+                            <button className="p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-600 hover:bg-gray-100 relative">
+                                <Bell size={20} />
+                                <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
+                            </button>
+                            <button
+                                onClick={handleLogout}
+                                className="flex items-center gap-2 px-4 py-2.5 bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition-all"
+                            >
+                                <LogOut size={18} />
+                                <span className="font-medium">Logout</span>
+                            </button>
+                        </div>
                     </div>
                 </header>
 
-                <div className="p-8 space-y-8">
-                    {/* Buyer Action Cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <Link href="/downloads" className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow flex flex-col items-center group">
-                            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                <Box size={32} className="text-white" />
+                {/* Content Area */}
+                <div className="p-8 space-y-6">
+                    {/* Success/Error Notifications */}
+                    {uploadSuccess && (
+                        <div className="bg-green-50 border border-green-200 rounded-xl p-5 flex items-center gap-4 animate-fadeIn">
+                            <CheckCircle size={24} className="text-green-600" />
+                            <div>
+                                <h3 className="text-green-900 font-bold">Upload Successful!</h3>
+                                <p className="text-green-700 text-sm">Your image has been uploaded successfully.</p>
                             </div>
-                            <span className="font-bold text-lg text-gray-800">My Downloads</span>
-                            <span className="text-sm text-gray-500 mt-2">Access your purchased items</span>
-                        </Link>
+                        </div>
+                    )}
 
-                        <Link href="/history" className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow flex flex-col items-center group">
-                            <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                <Clock size={32} className="text-white" />
+                    {uploadError && (
+                        <div className="bg-red-50 border border-red-200 rounded-xl p-5 flex items-center gap-4">
+                            <XCircle size={24} className="text-red-600" />
+                            <div>
+                                <h3 className="text-red-900 font-bold">Upload Failed</h3>
+                                <p className="text-red-700 text-sm">{uploadError}</p>
                             </div>
-                            <span className="font-bold text-lg text-gray-800">Purchase History</span>
-                            <span className="text-sm text-gray-500 mt-2">View your order history</span>
-                        </Link>
+                        </div>
+                    )}
 
-                        <Link href="/saved" className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow flex flex-col items-center group">
-                            <div className="w-16 h-16 bg-gradient-to-br from-pink-500 to-pink-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                <Heart size={32} className="text-white" />
+                    {/* Alert Banner */}
+                    <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 bg-amber-500 text-white rounded-full flex items-center justify-center">
+                                <AlertTriangle size={24} />
                             </div>
-                            <span className="font-bold text-lg text-gray-800">Saved Items</span>
-                            <span className="text-sm text-gray-500 mt-2">Your favorite collections</span>
-                        </Link>
+                            <div>
+                                <h3 className="text-amber-900 font-bold text-base">1 item(s) awaiting review</h3>
+                                <p className="text-amber-700 text-sm">1 regular assets + 0 exclusive images</p>
+                            </div>
+                        </div>
+                        <div className="flex gap-3">
+                            <Link
+                                href="/dashboard/manage-sellers"
+                                className="bg-gray-900 hover:bg-gray-800 text-white px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 shadow-lg hover:shadow-xl"
+                            >
+                                <Users size={20} />
+                                Manage Sellers
+                            </Link>
+                            <Link
+                                href="/dashboard/add-seller"
+                                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 shadow-lg hover:shadow-xl"
+                            >
+                                <UserPlus size={20} />
+                                Add Seller
+                            </Link>
+                        </div>
                     </div>
+
+                    {/* Upload New Image Section */}
+                    <div className="bg-white border border-gray-200 rounded-xl p-6">
+                        <div className="flex items-center gap-2 mb-6">
+                            <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
+                                <LucideImage size={18} className="text-red-600" />
+                            </div>
+                            <h3 className="text-lg font-bold text-gray-900">Upload New Image</h3>
+                        </div>
+
+                        <div
+                            onDragOver={handleDragOver}
+                            onDragLeave={handleDragLeave}
+                            onDrop={handleDrop}
+                            className={`border-2 border-dashed rounded-xl p-12 transition-all ${isDragging
+                                ? 'border-red-500 bg-red-50'
+                                : 'border-gray-300 bg-gray-50'
+                                }`}
+                        >
+                            {!previewUrl ? (
+                                <div className="text-center">
+                                    <div className="w-16 h-16 bg-red-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+                                        <LucideImage size={32} className="text-white" />
+                                    </div>
+                                    <h4 className="text-base font-bold text-gray-900 mb-2">
+                                        Drag and drop your image here
+                                    </h4>
+                                    <p className="text-sm text-gray-500 mb-6">
+                                        or click the button below to browse
+                                    </p>
+                                    <label className="inline-block">
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={handleFileSelect}
+                                            className="hidden"
+                                        />
+                                        <span className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-xl font-bold cursor-pointer transition-all inline-block">
+                                            Choose Image
+                                        </span>
+                                    </label>
+                                    <p className="text-xs text-gray-400 mt-4">
+                                        Supported formats: JPG, PNG, GIF, WebP
+                                    </p>
+                                </div>
+                            ) : (
+                                <div className="space-y-4">
+                                    <div className="relative rounded-xl overflow-hidden max-w-md mx-auto border-2 border-gray-200">
+                                        <img
+                                            src={previewUrl}
+                                            alt="Preview"
+                                            className="w-full h-auto"
+                                        />
+                                    </div>
+                                    <div className="text-center">
+                                        <p className="text-sm font-bold text-gray-900 mb-1">
+                                            {selectedFile?.name}
+                                        </p>
+                                        <p className="text-xs text-gray-500 mb-4">
+                                            {(selectedFile?.size / 1024 / 1024).toFixed(2)} MB
+                                        </p>
+                                        <div className="flex gap-3 justify-center">
+                                            <button
+                                                onClick={handleUpload}
+                                                disabled={isUploading}
+                                                className={`px-6 py-2 rounded-xl font-bold transition-all ${isUploading
+                                                    ? 'bg-gray-400 text-white cursor-not-allowed'
+                                                    : 'bg-green-600 hover:bg-green-700 text-white'
+                                                    }`}
+                                            >
+                                                {isUploading ? 'Uploading...' : 'Upload Image'}
+                                            </button>
+                                            <button
+                                                onClick={handleClearFile}
+                                                disabled={isUploading}
+                                                className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-xl font-bold transition-all disabled:opacity-50"
+                                            >
+                                                Clear
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Stats Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {/* Pending Review */}
+                        <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
+                                    <AlertTriangle size={24} className="text-amber-600" />
+                                </div>
+                            </div>
+                            <p className="text-sm text-gray-600 mb-1">Pending Review</p>
+                            <p className="text-3xl font-bold text-gray-900">1</p>
+                        </div>
+
+                        {/* Exclusive Pending */}
+                        <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
+                                    <LucideImage size={24} className="text-purple-600" />
+                                </div>
+                            </div>
+                            <p className="text-sm text-gray-600 mb-1">Exclusive Pending</p>
+                            <p className="text-3xl font-bold text-gray-900">0</p>
+                        </div>
+
+                        {/* Total Users */}
+                        <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="w-12 h-12 bg-gray-900 rounded-xl flex items-center justify-center">
+                                    <Users size={24} className="text-white" />
+                                </div>
+                            </div>
+                            <p className="text-sm text-gray-600 mb-1">Total Users</p>
+                            <p className="text-3xl font-bold text-gray-900">14</p>
+                        </div>
+
+                        {/* Total Uploaded */}
+                        <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                                    <CheckCircle size={24} className="text-green-600" />
+                                </div>
+                            </div>
+                            <p className="text-sm text-gray-600 mb-1">Total Uploaded</p>
+                            <p className="text-3xl font-bold text-gray-900">{uploadedImages.length}</p>
+                        </div>
+                    </div>
+
+                    {/* Recently Uploaded Images */}
+                    {uploadedImages.length > 0 && (
+                        <div className="bg-white border border-gray-200 rounded-xl p-6">
+                            <h3 className="text-lg font-bold text-gray-900 mb-4">Recently Uploaded ({uploadedImages.length})</h3>
+                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                                {uploadedImages.slice(0, 8).map((img) => (
+                                    <div key={img.id} className="group relative aspect-square rounded-xl overflow-hidden border-2 border-gray-200 hover:border-red-500 transition-all">
+                                        <img
+                                            src={img.preview}
+                                            alt={img.name}
+                                            className="w-full h-full object-cover"
+                                        />
+                                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                            <div className="text-center text-white p-2">
+                                                <p className="text-xs font-bold truncate">{img.name}</p>
+                                                <p className="text-xs">{(img.size / 1024 / 1024).toFixed(2)} MB</p>
+                                            </div>
+                                        </div>
+                                        <div className="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded text-xs font-bold">
+                                            <CheckCircle size={14} className="inline" />
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </main>
         </div>
     );
 };
 
-// Reusable Components
-const SidebarItem = ({ icon, label, href = "#", active = false, isAdmin = false }) => (
-    <Link
-        href={href}
-        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-medium text-sm ${active
-                ? isAdmin
-                    ? 'bg-[#1e5a8e] text-white shadow-lg font-bold'
-                    : 'bg-[#EF4444] text-white shadow-lg shadow-[#EF4444]/20 font-bold'
-                : 'text-gray-400 hover:text-white hover:bg-white/5'
-            }`}
-    >
-        {icon}
-        <span>{label}</span>
-    </Link>
-);
-
-const StatCard = ({ label, value, icon }) => (
-    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-        <div className="flex items-center justify-between mb-2">
-            <p className="text-xs font-bold text-gray-400 uppercase">{label}</p>
-            <div className="p-2 bg-gray-50 rounded-lg">{icon}</div>
-        </div>
-        <h4 className="text-3xl font-black text-gray-800">{value}</h4>
-    </div>
-);
-
-export default DashboardPage;
+export default AdminDashboard;

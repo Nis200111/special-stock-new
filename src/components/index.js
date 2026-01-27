@@ -21,6 +21,7 @@ import SpecialGraphicsLogo from "../assets/SPecialGraphgics .png";
 export { default as Navbar } from './Navbar';
 export { default as Footer } from './Footer';
 export { default as TopBanner } from './TopBanner';
+export { default as GoogleSignInButton } from './GoogleSignInButton';
 
 // Hero Component
 export const Hero = () => {
@@ -124,6 +125,12 @@ export const Hero = () => {
                     ))}
                 </div>
             </div>
+
+            {/* Photo Credit Caption Overlay */}
+            <div className="absolute bottom-4 left-4 z-20 flex items-center gap-2 text-white text-xs" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>
+                <FaCamera className="text-sm" />
+                <span>The night sky filled with... Photo by Craig Taylor Photography</span>
+            </div>
         </section>
     );
 };
@@ -175,8 +182,30 @@ export const Features = () => {
 // Gallery Component
 export const Gallery = () => {
     const [activeTab, setActiveTab] = useState("handpicked");
+    const [images, setImages] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const categories = ["Autumn", "Business", "Fitness", "Portrait", "Aerial", "Cityscape", "Dance", "Technology", "Forest"];
+
+    React.useEffect(() => {
+        const fetchImages = async () => {
+            try {
+                // Fetch approved images from backend
+                const response = await fetch('http://localhost:5000/api/public/featured-images?limit=12');
+                const data = await response.json();
+
+                if (data.success) {
+                    setImages(data.data);
+                }
+            } catch (error) {
+                console.error("Failed to fetch gallery images:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchImages();
+    }, []);
 
     return (
         <section className="py-12 sm:py-13 px-4 sm:px-6 bg-gray-50 text-gray-900">
@@ -214,74 +243,93 @@ export const Gallery = () => {
                     </button>
                 </div>
 
-                {/* Gallery Grid - Customizable Masonry Layout (Row-Major Distribution) */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-poppins">
-                    {/* Distributed Columns Logic */}
-                    {[0, 1, 2].map((colIndex) => (
-                        <div key={colIndex} className="flex flex-col gap-2">
-                            {(activeTab === "handpicked" ? featuredImages : popularContent)
-                                .filter((_, i) => i % 3 === colIndex)
-                                .map((item) => {
-                                    // Find the original index in the full list
-                                    const originalIdx = (activeTab === "handpicked" ? featuredImages : popularContent).indexOf(item);
+                {/* Gallery Grid */}
+                {loading ? (
+                    <div className="flex justify-center items-center h-64">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+                    </div>
+                ) : images.length === 0 ? (
+                    <div className="text-center py-12 text-gray-500">
+                        No images found. Be the first to upload!
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-poppins">
+                        {/* Distributed Columns Logic */}
+                        {[0, 1, 2].map((colIndex) => (
+                            <div key={colIndex} className="flex flex-col gap-2">
+                                {images
+                                    .filter((_, i) => i % 3 === colIndex)
+                                    .map((item) => {
+                                        // Find the original index in the full list
+                                        const originalIdx = images.indexOf(item);
 
-                                    // --- CUSTOMIZE YOUR IMAGES HERE ---
-                                    let imageStyle = "h-auto"; // Default natural height
-                                    let containerStyle = "";
+                                        // --- CUSTOMIZE YOUR IMAGES HERE ---
+                                        let imageStyle = "h-auto"; // Default natural height
+                                        let containerStyle = "";
 
-                                    // Match styles to the User's Screenshot:
-                                    // Top Row (0, 1, 2)
-                                    if (originalIdx === 0) imageStyle = "aspect-[16/10]"; // Left (Wide)
-                                    if (originalIdx === 1) imageStyle = "aspect-[16/9]"; // Middle (Wide - Collage)
-                                    if (originalIdx === 2) imageStyle = "aspect-[16/10]";   // Right (Standard)
+                                        // Match styles to the User's Screenshot:
+                                        // Top Row (0, 1, 2)
+                                        if (originalIdx === 0) imageStyle = "aspect-[16/10]"; // Left (Wide)
+                                        if (originalIdx === 1) imageStyle = "aspect-[16/9]"; // Middle (Wide - Collage)
+                                        if (originalIdx === 2) imageStyle = "aspect-[16/10]";   // Right (Standard)
 
-                                    // Second Row (3, 4, 5)
-                                    if (originalIdx === 3) imageStyle = "aspect-[4/3]";   // Left (Standard)
-                                    if (originalIdx === 4) imageStyle = "aspect-[16/9]";   // Middle (Portrait/Tall)
-                                    if (originalIdx === 5) imageStyle = "aspect-[4/3]";   // Right (Standard)
+                                        // Second Row (3, 4, 5)
+                                        if (originalIdx === 3) imageStyle = "aspect-[4/3]";   // Left (Standard)
+                                        if (originalIdx === 4) imageStyle = "aspect-[16/9]";   // Middle (Portrait/Tall)
+                                        if (originalIdx === 5) imageStyle = "aspect-[4/3]";   // Right (Standard)
 
-                                    // ----------------------------------
+                                        // Construct Image URL
+                                        const imageUrl = item.thumbnailPath
+                                            ? `http://localhost:5000${item.thumbnailPath}`
+                                            : item.watermarkedFilepath
+                                                ? `http://localhost:5000${item.watermarkedFilepath}`
+                                                : `http://localhost:5000${item.filepath}`;
 
-                                    return (
-                                        <div key={item.id} className={`relative group cursor-pointer rounded-lg overflow-hidden bg-white shadow-md ${containerStyle}`}>
-                                            <div className={`relative overflow-hidden ${imageStyle}`}>
-                                                <img
-                                                    src={item.thumbnail_path}
-                                                    alt={item.title}
-                                                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                                />
+                                        return (
+                                            <div key={item.id} className={`relative group cursor-pointer rounded-lg overflow-hidden bg-white shadow-md ${containerStyle}`}>
+                                                <div className={`relative overflow-hidden ${imageStyle}`}>
+                                                    <img
+                                                        src={imageUrl}
+                                                        alt={item.title}
+                                                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                                        onError={(e) => {
+                                                            e.target.onerror = null;
+                                                            e.target.src = "https://via.placeholder.com/300?text=Image+Not+Found";
+                                                        }}
+                                                    />
 
-                                                {/* Overlay on Hover */}
-                                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-4">
-                                                    <div className="flex justify-between items-start">
-                                                        <span className="text-white text-sm font-medium truncate w-[85%]">{item.title}</span>
-                                                    </div>
+                                                    {/* Overlay on Hover */}
+                                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-4">
+                                                        <div className="flex justify-between items-start">
+                                                            <span className="text-white text-sm font-medium truncate w-[85%]">{item.title}</span>
+                                                        </div>
 
-                                                    <div className="flex justify-between items-center mt-auto">
-                                                        <button className="bg-white/20 backdrop-blur-md border border-white/40 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 hover:bg-white/30 transition">
-                                                            <FaHeart /> <span>Save</span>
-                                                        </button>
-                                                        {item.price > 0 && (
-                                                            <button className="w-8 h-8 rounded-full bg-red-600 text-white flex items-center justify-center hover:bg-red-700 transition">
-                                                                <FaShoppingCart className="text-xs" />
+                                                        <div className="flex justify-between items-center mt-auto">
+                                                            <button className="bg-white/20 backdrop-blur-md border border-white/40 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 hover:bg-white/30 transition">
+                                                                <FaHeart /> <span>Save</span>
                                                             </button>
-                                                        )}
+                                                            {item.price > 0 && (
+                                                                <button className="w-8 h-8 rounded-full bg-red-600 text-white flex items-center justify-center hover:bg-red-700 transition">
+                                                                    <FaShoppingCart className="text-xs" />
+                                                                </button>
+                                                            )}
+                                                        </div>
                                                     </div>
-                                                </div>
 
-                                                {/* Popular Badge */}
-                                                {activeTab === "popular" && (
-                                                    <div className="absolute top-3 left-3 bg-red-600 text-white px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1">
-                                                        <FaFire /> POPULAR
-                                                    </div>
-                                                )}
+                                                    {/* Popular Badge */}
+                                                    {activeTab === "popular" && (
+                                                        <div className="absolute top-3 left-3 bg-red-600 text-white px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+                                                            <FaFire /> POPULAR
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
-                                        </div>
-                                    );
-                                })}
-                        </div>
-                    ))}
-                </div>
+                                        );
+                                    })}
+                            </div>
+                        ))}
+                    </div>
+                )}
 
                 <div className="mt-10 text-center">
                     <button className="px-8 py-3 border-2 border-gray-300 rounded-full hover:bg-gray-100 transition-colors font-medium">
