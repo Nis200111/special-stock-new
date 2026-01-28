@@ -12,7 +12,7 @@ export default function TopBanner() {
     }, []);
 
     return (
-        <div className="bg-[#3477a2] text-white text-center text-small sm:text-sm py-1 sm:py-1.99 px-2 tracking-[0.02rem] flex items-center justify-center gap-4">
+        <div className="bg-[#3477a2] text-white text-center text-small sm:text-sm py-3 sm:py-4 px-2 tracking-[0.02rem] flex items-center justify-center gap-4">
             <span className="block sm:inline">
                 Get 10 royalty-free image downloads each month with a cost-saving subscription.
             </span>

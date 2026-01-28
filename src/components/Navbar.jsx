@@ -23,7 +23,7 @@ export default function Navbar() {
     return (
         <>
             {/* Main Navbar */}
-            <header className="text-white px-4 sm:px-6 py-3 bg-[#131313] relative">
+            <header className="text-white px-4 sm:px-6 py-5 bg-[#131313] relative">
                 <div className="flex items-center justify-between w-full">
                     {/* Mobile button */}
                     <div className="flex lg:hidden items-center">

@@ -91,7 +91,7 @@ export default function AssetDetailsPage() {
 
     const previewUrl = isVideo
         ? `http://localhost:5000${asset.filepath}`
-        : `http://localhost:5000${asset.filepath}`;
+        : (asset.watermarkedFilepath ? `http://localhost:5000${asset.watermarkedFilepath}` : `http://localhost:5000${asset.filepath}`);
 
     return (
         <div className={styles.page}>

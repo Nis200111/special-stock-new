@@ -12,9 +12,9 @@ import {
 const SidebarItem = ({ href, icon, label, active = false }) => (
     <Link
         href={href}
-        className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${active
-            ? 'bg-red-600 text-white shadow-lg shadow-red-600/30'
-            : 'text-gray-400 hover:text-white hover:bg-gray-800'
+        className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group ${active
+            ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20'
+            : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
             }`}
     >
         {icon}
@@ -196,20 +196,20 @@ const AdminDashboard = () => {
     };
 
     return (
-        <div className="flex min-h-screen bg-gray-50">
+        <div className="flex min-h-screen bg-[#f8fafc]">
             {/* Left Sidebar */}
-            <aside className="w-64 bg-gray-900 text-white flex flex-col fixed h-screen">
+            <aside className="w-64 bg-[#0f172a] text-white flex flex-col fixed h-screen border-r border-slate-800">
                 {/* Logo */}
-                <div className="flex items-center gap-3 p-6 border-b border-gray-800">
-                    <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
+                <div className="flex items-center gap-3 p-6 border-b border-slate-800/50">
+                    <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-600/20">
                         <Layers className="text-white" size={24} />
                     </div>
-                    <span className="text-xl font-bold">Special Stocks</span>
+                    <span className="text-xl font-bold tracking-tight">Special Stocks</span>
                 </div>
 
                 {/* Menu */}
                 <div className="flex-1 px-4 py-6">
-                    <p className="text-xs text-gray-500 font-bold uppercase mb-4 px-4">MENU</p>
+                    <p className="text-xs text-slate-500 font-bold uppercase mb-4 px-4 tracking-wider">MENU</p>
                     <div className="space-y-1">
                         <SidebarItem href="/dashboard" icon={<LayoutDashboard size={20} />} label="Dashboard" active />
                         <SidebarItem href="/dashboard/image-approval" icon={<CheckCircle size={20} />} label="Image Approval" />
@@ -221,27 +221,27 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* User Section at Bottom */}
-                <div className="p-4 border-t border-gray-800">
+                <div className="p-4 border-t border-slate-800/50">
                     <div className="flex items-center gap-3 mb-4">
-                        <div className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center">
+                        <div className="w-10 h-10 bg-indigo-600 rounded-full flex items-center justify-center ring-2 ring-slate-800">
                             <span className="text-white font-bold text-lg">{userName.charAt(0).toUpperCase()}</span>
                         </div>
                         <div className="flex-1">
-                            <p className="text-sm font-bold text-white">{userName}</p>
-                            <p className="text-xs text-gray-400">Admin Account</p>
+                            <p className="text-sm font-bold text-white max-w-[140px] truncate">{userName}</p>
+                            <p className="text-xs text-slate-400">Admin Account</p>
                         </div>
                     </div>
-                    <div className="flex items-center gap-2 bg-red-600 text-white px-3 py-2 rounded-lg cursor-pointer hover:bg-red-700">
+                    <div className="flex items-center gap-2 bg-rose-500/10 border border-rose-500/20 text-rose-500 px-3 py-2 rounded-lg cursor-pointer hover:bg-rose-500/20 transition-colors">
                         <AlertTriangle size={16} />
-                        <span className="text-sm font-bold">{stats.pending} Issue{stats.pending !== 1 && 's'}</span>
+                        <span className="text-sm font-medium">{stats.pending} Issue{stats.pending !== 1 && 's'}</span>
                     </div>
                 </div>
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 ml-64 bg-gray-50">
+            <main className="flex-1 ml-64 bg-[#f8fafc]">
                 {/* Top Header */}
-                <header className="bg-white border-b border-gray-200 px-8 py-4 sticky top-0 z-10">
+                <header className="bg-white/80 backdrop-blur-md border-b border-slate-200 px-8 py-4 sticky top-0 z-10 transition-all">
                     <div className="flex items-center justify-between">
                         <div>
                             <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
@@ -249,20 +249,20 @@ const AdminDashboard = () => {
                         </div>
                         <div className="flex items-center gap-4">
                             <div className="relative">
-                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                                 <input
                                     type="text"
                                     placeholder="Search..."
-                                    className="pl-12 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm w-80 text-gray-700 focus:ring-2 focus:ring-red-500/20 outline-none"
+                                    className="pl-12 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm w-80 text-slate-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
                                 />
                             </div>
-                            <button className="p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-600 hover:bg-gray-100 relative">
+                            <button className="p-2.5 bg-white border border-slate-200 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-indigo-600 transition-colors relative">
                                 <Bell size={20} />
-                                <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
+                                <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full"></span>
                             </button>
                             <button
                                 onClick={handleLogout}
-                                className="flex items-center gap-2 px-4 py-2.5 bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition-all"
+                                className="flex items-center gap-2 px-4 py-2.5 bg-slate-900 text-white rounded-xl hover:bg-slate-800 transition-all shadow-sm"
                             >
                                 <LogOut size={18} />
                                 <span className="font-medium">Logout</span>
@@ -308,14 +308,14 @@ const AdminDashboard = () => {
                         <div className="flex gap-3">
                             <Link
                                 href="/dashboard/image-approval"
-                                className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 shadow-lg hover:shadow-xl"
+                                className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 shadow-lg shadow-indigo-600/20 hover:shadow-xl hover:translate-y-[-1px]"
                             >
                                 <CheckCircle size={20} />
                                 Review Now
                             </Link>
                             <Link
                                 href="/dashboard/manage-sellers"
-                                className="bg-gray-900 hover:bg-gray-800 text-white px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 shadow-lg hover:shadow-xl"
+                                className="bg-slate-900 hover:bg-slate-800 text-white px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 shadow-lg shadow-slate-900/20 hover:shadow-xl hover:translate-y-[-1px]"
                             >
                                 <Users size={20} />
                                 Manage Sellers
@@ -324,32 +324,32 @@ const AdminDashboard = () => {
                     </div>
 
                     {/* Upload New Image Section */}
-                    <div className="bg-white border border-gray-200 rounded-xl p-6">
+                    <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
                         <div className="flex items-center gap-2 mb-6">
-                            <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
-                                <LucideImage size={18} className="text-red-600" />
+                            <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
+                                <LucideImage size={18} className="text-indigo-600" />
                             </div>
-                            <h3 className="text-lg font-bold text-gray-900">Upload New Image (Admin)</h3>
+                            <h3 className="text-lg font-bold text-slate-900">Upload New Image (Admin)</h3>
                         </div>
 
                         <div
                             onDragOver={handleDragOver}
                             onDragLeave={handleDragLeave}
                             onDrop={handleDrop}
-                            className={`border-2 border-dashed rounded-xl p-12 transition-all ${isDragging
-                                ? 'border-red-500 bg-red-50'
-                                : 'border-gray-300 bg-gray-50'
+                            className={`border-2 border-dashed rounded-xl p-12 transition-all duration-200 ${isDragging
+                                ? 'border-indigo-500 bg-indigo-50/50'
+                                : 'border-slate-200 bg-slate-50/50 hover:border-indigo-500/50'
                                 }`}
                         >
                             {!previewUrl ? (
                                 <div className="text-center">
-                                    <div className="w-16 h-16 bg-red-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+                                    <div className="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-600/20">
                                         <LucideImage size={32} className="text-white" />
                                     </div>
-                                    <h4 className="text-base font-bold text-gray-900 mb-2">
+                                    <h4 className="text-base font-bold text-slate-900 mb-2">
                                         Drag and drop your image here
                                     </h4>
-                                    <p className="text-sm text-gray-500 mb-6">
+                                    <p className="text-sm text-slate-500 mb-6">
                                         or click the button below to browse
                                     </p>
                                     <label className="inline-block">
@@ -359,11 +359,11 @@ const AdminDashboard = () => {
                                             onChange={handleFileSelect}
                                             className="hidden"
                                         />
-                                        <span className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-xl font-bold cursor-pointer transition-all inline-block">
+                                        <span className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-xl font-bold cursor-pointer transition-all inline-block shadow-lg shadow-indigo-600/20 hover:shadow-xl hover:translate-y-[-1px]">
                                             Choose Image
                                         </span>
                                     </label>
-                                    <p className="text-xs text-gray-400 mt-4">
+                                    <p className="text-xs text-slate-400 mt-4">
                                         Supported formats: JPG, PNG, GIF, WebP
                                     </p>
                                 </div>
@@ -411,69 +411,69 @@ const AdminDashboard = () => {
                     {/* Stats Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         {/* Pending Review */}
-                        <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
+                        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-200">
                             <div className="flex items-center justify-between mb-4">
-                                <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
-                                    <AlertTriangle size={24} className="text-amber-600" />
+                                <div className="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center text-amber-600">
+                                    <AlertTriangle size={24} />
                                 </div>
                             </div>
-                            <p className="text-sm text-gray-600 mb-1">Pending Review</p>
-                            <p className="text-3xl font-bold text-gray-900">{stats.pending}</p>
+                            <p className="text-sm text-slate-600 mb-1 font-medium">Pending Review</p>
+                            <p className="text-3xl font-bold text-slate-900">{stats.pending}</p>
                         </div>
 
                         {/* Approved */}
-                        <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
+                        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-200">
                             <div className="flex items-center justify-between mb-4">
-                                <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                                    <LucideImage size={24} className="text-green-600" />
+                                <div className="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600">
+                                    <LucideImage size={24} />
                                 </div>
                             </div>
-                            <p className="text-sm text-gray-600 mb-1">Total Approved</p>
-                            <p className="text-3xl font-bold text-gray-900">{stats.approved}</p>
+                            <p className="text-sm text-slate-600 mb-1 font-medium">Total Approved</p>
+                            <p className="text-3xl font-bold text-slate-900">{stats.approved}</p>
                         </div>
 
                         {/* Total Users */}
-                        <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
+                        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-200">
                             <div className="flex items-center justify-between mb-4">
-                                <div className="w-12 h-12 bg-gray-900 rounded-xl flex items-center justify-center">
-                                    <Users size={24} className="text-white" />
+                                <div className="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center text-slate-600">
+                                    <Users size={24} />
                                 </div>
                             </div>
-                            <p className="text-sm text-gray-600 mb-1">Total Uploads</p>
-                            <p className="text-3xl font-bold text-gray-900">{stats.total}</p>
+                            <p className="text-sm text-slate-600 mb-1 font-medium">Total Uploads</p>
+                            <p className="text-3xl font-bold text-slate-900">{stats.total}</p>
                         </div>
 
-                        {/* Total Uploaded */}
-                        <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
+                        {/* Rejected */}
+                        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-200">
                             <div className="flex items-center justify-between mb-4">
-                                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                                    <CheckCircle size={24} className="text-blue-600" />
+                                <div className="w-12 h-12 bg-rose-50 rounded-xl flex items-center justify-center text-rose-600">
+                                    <XCircle size={24} />
                                 </div>
                             </div>
-                            <p className="text-sm text-gray-600 mb-1">Rejected</p>
-                            <p className="text-3xl font-bold text-gray-900">{stats.rejected}</p>
+                            <p className="text-sm text-slate-600 mb-1 font-medium">Rejected</p>
+                            <p className="text-3xl font-bold text-slate-900">{stats.rejected}</p>
                         </div>
                     </div>
 
                     {/* Recently Uploaded Images */}
                     {uploadedImages.length > 0 && (
-                        <div className="bg-white border border-gray-200 rounded-xl p-6">
-                            <h3 className="text-lg font-bold text-gray-900 mb-4">Recently Uploaded ({uploadedImages.length})</h3>
+                        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+                            <h3 className="text-lg font-bold text-slate-900 mb-4">Recently Uploaded ({uploadedImages.length})</h3>
                             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                                 {uploadedImages.slice(0, 8).map((img) => (
-                                    <div key={img.id} className="group relative aspect-square rounded-xl overflow-hidden border-2 border-gray-200 hover:border-red-500 transition-all">
+                                    <div key={img.id} className="group relative aspect-square rounded-xl overflow-hidden border-2 border-slate-200 hover:border-indigo-500 transition-all">
                                         <img
                                             src={img.preview}
                                             alt={img.name}
                                             className="w-full h-full object-cover"
                                         />
-                                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                        <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                             <div className="text-center text-white p-2">
                                                 <p className="text-xs font-bold truncate">{img.name}</p>
                                                 <p className="text-xs">{(img.size / 1024 / 1024).toFixed(2)} MB</p>
                                             </div>
                                         </div>
-                                        <div className="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded text-xs font-bold">
+                                        <div className="absolute top-2 right-2 bg-emerald-500 text-white px-2 py-1 rounded text-xs font-bold">
                                             <CheckCircle size={14} className="inline" />
                                         </div>
                                     </div>
