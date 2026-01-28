@@ -215,7 +215,7 @@ const AdminDashboard = () => {
                         <SidebarItem href="/dashboard/image-approval" icon={<CheckCircle size={20} />} label="Image Approval" />
                         <SidebarItem href="/profile" icon={<UserCircle size={20} />} label="Profile" />
                         <SidebarItem href="/content" icon={<Box size={20} />} label="Content" />
-                        <SidebarItem href="/gallery" icon={<LucideImage size={20} />} label="Gallery" />
+                        <SidebarItem href="/" icon={<LucideImage size={20} />} label="Gallery" />
                         <SidebarItem href="/exclusive" icon={<Layers size={20} />} label="Exclusive" />
                     </div>
                 </div>

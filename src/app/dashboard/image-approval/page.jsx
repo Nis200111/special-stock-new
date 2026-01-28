@@ -12,7 +12,8 @@ import {
     Search,
     ChevronLeft,
     ChevronRight,
-    AlertCircle
+    AlertCircle,
+    Video
 } from "lucide-react";
 import styles from "./image-approval.module.css";
 
@@ -296,11 +297,24 @@ export default function ImageApprovalPage() {
 
                                 {/* Image Preview */}
                                 <div className={styles.imageWrapper}>
-                                    <img
-                                        src={`http://localhost:5000${image.thumbnailPath || image.watermarkedFilepath || image.filepath}`}
-                                        alt={image.title}
-                                        className={styles.image}
-                                    />
+                                    {(image.contentType === 'video' || image.filename?.match(/\.(mp4|mov|quicktime)$/i)) ? (
+                                        <div className="absolute top-0 left-0 w-full h-full bg-black flex items-center justify-center">
+                                            <video
+                                                src={`http://localhost:5000${image.filepath}`}
+                                                controls
+                                                className="w-full h-full object-contain"
+                                            />
+                                            <div className="absolute top-2 right-2 bg-black/50 p-1 rounded-md pointer-events-none">
+                                                <Video size={16} className="text-white" />
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <img
+                                            src={`http://localhost:5000${image.thumbnailPath || image.watermarkedFilepath || image.filepath}`}
+                                            alt={image.title}
+                                            className={styles.image}
+                                        />
+                                    )}
                                     <div className={styles.overlay}>
                                         <span className={`${styles.badge} ${styles[image.status]}`}>
                                             {image.status}

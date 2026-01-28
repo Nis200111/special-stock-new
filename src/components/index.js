@@ -2,8 +2,9 @@
 
 import React, { useState, useRef } from "react";
 import Link from "next/link";
-import { FaImage, FaVideo, FaMusic, FaSearch, FaCamera, FaChevronDown, FaRobot, FaHeart, FaShoppingCart, FaFire, FaFolderOpen, FaChevronLeft, FaChevronRight, FaArrowRight } from "react-icons/fa";
+import { FaImage, FaVideo, FaMusic, FaSearch, FaCamera, FaChevronDown, FaRobot, FaHeart, FaShoppingCart, FaFire, FaFolderOpen, FaChevronLeft, FaChevronRight, FaArrowRight, FaPlay } from "react-icons/fa";
 import { featuredImages, popularContent, collections, trustedCompanies } from "@/data/mockData";
+import VideoPreview from "./ui/VideoPreview";
 import HeroBG from "../assets/bg1.png";
 import Images from "../assets/Images.jpg";
 import Video from "../assets/video.jpg";
@@ -190,12 +191,18 @@ export const Gallery = () => {
     React.useEffect(() => {
         const fetchImages = async () => {
             try {
-                // Fetch approved images from backend
-                const response = await fetch('http://localhost:5000/api/public/featured-images?limit=12');
+                // Fetch approved images from backend (recent first)
+                const response = await fetch('http://localhost:5000/api/public/images?limit=12&sortBy=recent', {
+                    cache: 'no-store',
+                    headers: {
+                        'Pragma': 'no-cache',
+                        'Cache-Control': 'no-cache'
+                    }
+                });
                 const data = await response.json();
 
                 if (data.success) {
-                    setImages(data.data);
+                    setImages(data.data.images);
                 }
             } catch (error) {
                 console.error("Failed to fetch gallery images:", error);
@@ -268,6 +275,9 @@ export const Gallery = () => {
                                         let containerStyle = "";
 
                                         // Match styles to the User's Screenshot:
+                                        // Default for unknown indices
+                                        if (originalIdx >= 6) imageStyle = "aspect-[16/9]";
+
                                         // Top Row (0, 1, 2)
                                         if (originalIdx === 0) imageStyle = "aspect-[16/10]"; // Left (Wide)
                                         if (originalIdx === 1) imageStyle = "aspect-[16/9]"; // Middle (Wide - Collage)
@@ -286,17 +296,24 @@ export const Gallery = () => {
                                                 : `http://localhost:5000${item.filepath}`;
 
                                         return (
-                                            <div key={item.id} className={`relative group cursor-pointer rounded-lg overflow-hidden bg-white shadow-md ${containerStyle}`}>
+                                            <Link href={`/asset_details/${item.id}`} key={item.id} className={`relative group cursor-pointer rounded-lg overflow-hidden bg-white shadow-md ${containerStyle}`}>
                                                 <div className={`relative overflow-hidden ${imageStyle}`}>
-                                                    <img
-                                                        src={imageUrl}
-                                                        alt={item.title}
-                                                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                                        onError={(e) => {
-                                                            e.target.onerror = null;
-                                                            e.target.src = "https://via.placeholder.com/300?text=Image+Not+Found";
-                                                        }}
-                                                    />
+                                                    {(item.contentType === 'video' || item.filename?.match(/\.(mp4|mov|quicktime)$/i)) ? (
+                                                        <VideoPreview
+                                                            src={imageUrl}
+                                                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                                        />
+                                                    ) : (
+                                                        <img
+                                                            src={imageUrl}
+                                                            alt={item.title}
+                                                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                                            onError={(e) => {
+                                                                e.target.onerror = null;
+                                                                e.target.src = "https://via.placeholder.com/300?text=Image+Not+Found";
+                                                            }}
+                                                        />
+                                                    )}
 
                                                     {/* Overlay on Hover */}
                                                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-4">
@@ -323,7 +340,7 @@ export const Gallery = () => {
                                                         </div>
                                                     )}
                                                 </div>
-                                            </div>
+                                            </Link>
                                         );
                                     })}
                             </div>

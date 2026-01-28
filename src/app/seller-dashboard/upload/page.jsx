@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
-    ArrowLeft, Upload, Image as ImageIcon, CheckCircle, XCircle, Tag, DollarSign, FileText
+    ArrowLeft, Upload, Image as ImageIcon, CheckCircle, XCircle, Tag, DollarSign, FileText, Video
 } from 'lucide-react';
 
 const SellerUploadPage = () => {
@@ -19,21 +19,30 @@ const SellerUploadPage = () => {
         category: 'photography',
         tags: '',
         price: '',
+        contentType: 'image', // 'image' or 'video'
         file: null
     });
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            // Validate file type
-            if (!file.type.startsWith('image/')) {
-                setError('Please select an image file');
-                return;
+            // Validate file type based on content type
+            if (formData.contentType === 'image') {
+                if (!file.type.startsWith('image/')) {
+                    setError('Please select an image file');
+                    return;
+                }
+            } else if (formData.contentType === 'video') {
+                if (!file.type.startsWith('video/')) {
+                    setError('Please select a video file');
+                    return;
+                }
             }
 
-            // Validate file size (max 10MB)
-            if (file.size > 10 * 1024 * 1024) {
-                setError('File size must be less than 10MB');
+            // Validate file size (max 50MB for video, 10MB for image)
+            const maxSize = formData.contentType === 'video' ? 50 * 1024 * 1024 : 10 * 1024 * 1024;
+            if (file.size > maxSize) {
+                setError(`File size must be less than ${formData.contentType === 'video' ? '50MB' : '10MB'}`);
                 return;
             }
 
@@ -61,7 +70,7 @@ const SellerUploadPage = () => {
 
         // Validation
         if (!formData.file) {
-            setError('Please select an image to upload');
+            setError(`Please select a ${formData.contentType} to upload`);
             return;
         }
 
@@ -78,12 +87,13 @@ const SellerUploadPage = () => {
 
             // Create FormData for file upload
             const uploadData = new FormData();
-            uploadData.append('image', formData.file);
+            uploadData.append('media', formData.file);
             uploadData.append('title', formData.title);
             uploadData.append('description', formData.description);
             uploadData.append('category', formData.category);
             uploadData.append('tags', formData.tags);
             uploadData.append('price', formData.price);
+            uploadData.append('contentType', formData.contentType);
             uploadData.append('sellerId', user.id);
 
             const response = await fetch('http://localhost:5000/api/seller/upload-image', {
@@ -107,6 +117,7 @@ const SellerUploadPage = () => {
                 category: 'photography',
                 tags: '',
                 price: '',
+                contentType: 'image',
                 file: null
             });
             setPreview(null);
@@ -137,7 +148,7 @@ const SellerUploadPage = () => {
                             <ArrowLeft size={24} className="text-gray-700" />
                         </Link>
                         <div>
-                            <h1 className="text-2xl font-bold text-gray-900">Upload Image</h1>
+                            <h1 className="text-2xl font-bold text-gray-900">Upload Content</h1>
                             <p className="text-sm text-gray-500">Share your creative work with buyers</p>
                         </div>
                     </div>
@@ -151,7 +162,7 @@ const SellerUploadPage = () => {
                     <div className="bg-green-50 border border-green-200 rounded-xl p-5 flex items-center gap-4 mb-6 animate-fadeIn">
                         <CheckCircle size={24} className="text-green-600" />
                         <div>
-                            <h3 className="text-green-900 font-bold">Image Uploaded Successfully!</h3>
+                            <h3 className="text-green-900 font-bold">Content Uploaded Successfully!</h3>
                             <p className="text-green-700 text-sm">Redirecting to dashboard...</p>
                         </div>
                     </div>
@@ -169,20 +180,60 @@ const SellerUploadPage = () => {
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Image Upload */}
+                    {/* Content Upload */}
                     <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-200">
-                        <h2 className="text-xl font-bold text-gray-900 mb-6">Upload Your Image</h2>
+                        <div className="flex items-center justify-between mb-6">
+                            <h2 className="text-xl font-bold text-gray-900">Upload Your Content</h2>
+
+                            {/* Type Selector */}
+                            <div className="flex p-1 bg-gray-100 rounded-lg">
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setFormData({ ...formData, contentType: 'image', file: null });
+                                        setPreview(null);
+                                        setError('');
+                                    }}
+                                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${formData.contentType === 'image'
+                                        ? 'bg-white text-gray-900 shadow-sm'
+                                        : 'text-gray-500 hover:text-gray-700'
+                                        }`}
+                                >
+                                    <div className="flex items-center gap-2">
+                                        <ImageIcon size={16} />
+                                        Image
+                                    </div>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setFormData({ ...formData, contentType: 'video', file: null });
+                                        setPreview(null);
+                                        setError('');
+                                    }}
+                                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${formData.contentType === 'video'
+                                        ? 'bg-white text-gray-900 shadow-sm'
+                                        : 'text-gray-500 hover:text-gray-700'
+                                        }`}
+                                >
+                                    <div className="flex items-center gap-2">
+                                        <Video size={16} />
+                                        Video
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
 
                         <div className="mb-6">
                             <label className="block text-sm font-bold text-gray-900 mb-3">
-                                Select Image *
+                                Select {formData.contentType === 'image' ? 'Image' : 'Video'} *
                             </label>
 
                             {!preview ? (
                                 <div className="border-2 border-dashed border-gray-300 rounded-xl p-12 text-center hover:border-blue-500 transition-colors">
                                     <input
                                         type="file"
-                                        accept="image/*"
+                                        accept={formData.contentType === 'image' ? "image/*" : "video/mp4,video/quicktime"}
                                         onChange={handleFileChange}
                                         className="hidden"
                                         id="file-upload"
@@ -191,22 +242,36 @@ const SellerUploadPage = () => {
                                         htmlFor="file-upload"
                                         className="cursor-pointer"
                                     >
-                                        <Upload size={48} className="mx-auto text-gray-400 mb-4" />
+                                        {formData.contentType === 'image' ? (
+                                            <Upload size={48} className="mx-auto text-gray-400 mb-4" />
+                                        ) : (
+                                            <Video size={48} className="mx-auto text-gray-400 mb-4" />
+                                        )}
                                         <p className="text-gray-600 font-medium mb-2">
                                             Click to upload or drag and drop
                                         </p>
                                         <p className="text-sm text-gray-500">
-                                            PNG, JPG, WEBP up to 10MB
+                                            {formData.contentType === 'image'
+                                                ? 'PNG, JPG, WEBP up to 10MB'
+                                                : 'MP4, MOV up to 50MB'}
                                         </p>
                                     </label>
                                 </div>
                             ) : (
                                 <div className="relative">
-                                    <img
-                                        src={preview}
-                                        alt="Preview"
-                                        className="w-full h-auto rounded-xl border border-gray-200"
-                                    />
+                                    {formData.contentType === 'image' ? (
+                                        <img
+                                            src={preview}
+                                            alt="Preview"
+                                            className="w-full h-auto rounded-xl border border-gray-200"
+                                        />
+                                    ) : (
+                                        <video
+                                            src={preview}
+                                            controls
+                                            className="w-full h-auto rounded-xl border border-gray-200"
+                                        />
+                                    )}
                                     <button
                                         type="button"
                                         onClick={() => {
@@ -222,9 +287,9 @@ const SellerUploadPage = () => {
                         </div>
                     </div>
 
-                    {/* Image Details */}
+                    {/* Content Details */}
                     <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-200 space-y-5">
-                        <h2 className="text-xl font-bold text-gray-900 mb-6">Image Details</h2>
+                        <h2 className="text-xl font-bold text-gray-900 mb-6">Content Details</h2>
 
                         {/* Title */}
                         <div>
@@ -251,7 +316,7 @@ const SellerUploadPage = () => {
                                 name="description"
                                 value={formData.description}
                                 onChange={handleInputChange}
-                                placeholder="Describe your image..."
+                                placeholder="Describe your content..."
                                 rows={4}
                                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none"
                             />
@@ -294,7 +359,7 @@ const SellerUploadPage = () => {
                                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none"
                             />
                             <p className="text-xs text-gray-500 mt-2">
-                                Add relevant tags to help buyers find your image
+                                Add relevant tags to help buyers find your content
                             </p>
                         </div>
 
@@ -326,8 +391,8 @@ const SellerUploadPage = () => {
                             type="submit"
                             disabled={isUploading || !formData.file}
                             className={`flex-1 px-6 py-4 rounded-xl font-bold transition-all flex items-center justify-center gap-2 ${isUploading || !formData.file
-                                    ? 'bg-gray-400 text-white cursor-not-allowed'
-                                    : 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl'
+                                ? 'bg-gray-400 text-white cursor-not-allowed'
+                                : 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl'
                                 }`}
                         >
                             {isUploading ? (
@@ -338,7 +403,7 @@ const SellerUploadPage = () => {
                             ) : (
                                 <>
                                     <Upload size={20} />
-                                    Upload Image
+                                    Upload Content
                                 </>
                             )}
                         </button>
