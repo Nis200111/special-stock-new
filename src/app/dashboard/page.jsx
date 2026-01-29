@@ -8,6 +8,8 @@ import {
     Layers, LogOut, Search, Bell, AlertTriangle, UserCircle, CheckCircle, XCircle, UserPlus
 } from 'lucide-react';
 
+import IMGLOGO from '../../assets/speciallogo.png';
+
 // Sidebar Item Component
 const SidebarItem = ({ href, icon, label, active = false }) => (
     <Link
@@ -201,10 +203,13 @@ const AdminDashboard = () => {
             <aside className="w-64 bg-[#0f172a] text-white flex flex-col fixed h-screen border-r border-slate-800">
                 {/* Logo */}
                 <div className="flex items-center gap-3 p-6 border-b border-slate-800/50">
-                    <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-600/20">
-                        <Layers className="text-white" size={24} />
-                    </div>
-                    <span className="text-xl font-bold tracking-tight">Special Stocks</span>
+                    <Link href="/" className="flex items-center">
+                        <img
+                            src={IMGLOGO.src}
+                            alt="Special Stocks"
+                            className="max-h-[32px] sm:max-h-[40px] lg:max-h-[48px] w-auto invert"
+                        />
+                    </Link>
                 </div>
 
                 {/* Menu */}
