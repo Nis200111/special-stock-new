@@ -2,7 +2,8 @@
 
 import React, { useState, useRef } from "react";
 import Link from "next/link";
-import { FaImage, FaVideo, FaMusic, FaSearch, FaCamera, FaChevronDown, FaRobot, FaHeart, FaShoppingCart, FaFire, FaFolderOpen, FaChevronLeft, FaChevronRight, FaArrowRight, FaPlay } from "react-icons/fa";
+import { FaImage, FaVideo, FaMusic, FaSearch, FaCamera, FaChevronDown, FaRobot, FaHeart, FaShoppingCart, FaFire, FaFolderOpen, FaChevronLeft, FaChevronRight, FaArrowRight } from "react-icons/fa";
+import { Play, ShoppingCart, Heart } from "lucide-react";
 import { featuredImages, popularContent, collections, trustedCompanies } from "@/data/mockData";
 import VideoPreview from "./ui/VideoPreview";
 import HeroBG from "../assets/bg1.png";
@@ -260,91 +261,84 @@ export const Gallery = () => {
                         No images found. Be the first to upload!
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-poppins">
-                        {/* Distributed Columns Logic */}
-                        {[0, 1, 2].map((colIndex) => (
-                            <div key={colIndex} className="flex flex-col gap-2">
-                                {images
-                                    .filter((_, i) => i % 3 === colIndex)
-                                    .map((item) => {
-                                        // Find the original index in the full list
-                                        const originalIdx = images.indexOf(item);
+                    <div className="columns-2 md:columns-3 lg:columns-4 gap-4 px-4 md:px-8 space-y-4">
+                        {images.map((item) => {
+                            // Construct Image URL
+                            const imageUrl = item.thumbnailPath
+                                ? `http://localhost:5000${item.thumbnailPath}`
+                                : item.watermarkedFilepath
+                                    ? `http://localhost:5000${item.watermarkedFilepath}`
+                                    : `http://localhost:5000${item.filepath}`;
 
-                                        // --- CUSTOMIZE YOUR IMAGES HERE ---
-                                        let imageStyle = "h-auto"; // Default natural height
-                                        let containerStyle = "";
+                            const isVideo = item.contentType === 'video' || item.filename?.match(/\.(mp4|mov|quicktime)$/i);
 
-                                        // Match styles to the User's Screenshot:
-                                        // Default for unknown indices
-                                        if (originalIdx >= 6) imageStyle = "aspect-[16/9]";
-
-                                        // Top Row (0, 1, 2)
-                                        if (originalIdx === 0) imageStyle = "aspect-[16/10]"; // Left (Wide)
-                                        if (originalIdx === 1) imageStyle = "aspect-[16/9]"; // Middle (Wide - Collage)
-                                        if (originalIdx === 2) imageStyle = "aspect-[16/10]";   // Right (Standard)
-
-                                        // Second Row (3, 4, 5)
-                                        if (originalIdx === 3) imageStyle = "aspect-[4/3]";   // Left (Standard)
-                                        if (originalIdx === 4) imageStyle = "aspect-[16/9]";   // Middle (Portrait/Tall)
-                                        if (originalIdx === 5) imageStyle = "aspect-[4/3]";   // Right (Standard)
-
-                                        // Construct Image URL
-                                        const imageUrl = item.thumbnailPath
-                                            ? `http://localhost:5000${item.thumbnailPath}`
-                                            : item.watermarkedFilepath
-                                                ? `http://localhost:5000${item.watermarkedFilepath}`
-                                                : `http://localhost:5000${item.filepath}`;
-
-                                        return (
-                                            <Link href={`/asset_details/${item.id}`} key={item.id} className={`relative group cursor-pointer rounded-lg overflow-hidden bg-white shadow-md ${containerStyle}`}>
-                                                <div className={`relative overflow-hidden ${imageStyle}`}>
-                                                    {(item.contentType === 'video' || item.filename?.match(/\.(mp4|mov|quicktime)$/i)) ? (
-                                                        <VideoPreview
-                                                            src={imageUrl}
-                                                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                                        />
-                                                    ) : (
-                                                        <img
-                                                            src={imageUrl}
-                                                            alt={item.title}
-                                                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                                            onError={(e) => {
-                                                                e.target.onerror = null;
-                                                                e.target.src = "https://via.placeholder.com/300?text=Image+Not+Found";
-                                                            }}
-                                                        />
-                                                    )}
-
-                                                    {/* Overlay on Hover */}
-                                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-4">
-                                                        <div className="flex justify-between items-start">
-                                                            <span className="text-white text-sm font-medium truncate w-[85%]">{item.title}</span>
-                                                        </div>
-
-                                                        <div className="flex justify-between items-center mt-auto">
-                                                            <button className="bg-white/20 backdrop-blur-md border border-white/40 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 hover:bg-white/30 transition">
-                                                                <FaHeart /> <span>Save</span>
-                                                            </button>
-                                                            {item.price > 0 && (
-                                                                <button className="w-8 h-8 rounded-full bg-red-600 text-white flex items-center justify-center hover:bg-red-700 transition">
-                                                                    <FaShoppingCart className="text-xs" />
-                                                                </button>
-                                                            )}
-                                                        </div>
+                            return (
+                                <Link
+                                    href={`/asset_details/${item.id}`}
+                                    key={item.id}
+                                    className="break-inside-avoid mb-4 relative group overflow-hidden rounded-2xl bg-slate-100 flex flex-col transition-all duration-300 hover:shadow-2xl hover:shadow-black/20"
+                                >
+                                    {/* Media Content */}
+                                    <div className="relative w-full overflow-hidden">
+                                        {isVideo ? (
+                                            <div className="relative aspect-auto">
+                                                <VideoPreview
+                                                    src={imageUrl}
+                                                    className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-110"
+                                                />
+                                                <div className="absolute inset-0 flex items-center justify-center bg-black/20 pointer-events-none">
+                                                    <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 text-white">
+                                                        <Play fill="currentColor" size={24} className="ml-1" />
                                                     </div>
-
-                                                    {/* Popular Badge */}
-                                                    {activeTab === "popular" && (
-                                                        <div className="absolute top-3 left-3 bg-red-600 text-white px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1">
-                                                            <FaFire /> POPULAR
-                                                        </div>
-                                                    )}
                                                 </div>
-                                            </Link>
-                                        );
-                                    })}
-                            </div>
-                        ))}
+                                            </div>
+                                        ) : (
+                                            <img
+                                                src={imageUrl}
+                                                alt={item.title}
+                                                className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-110"
+                                                onError={(e) => {
+                                                    e.target.onerror = null;
+                                                    e.target.src = "https://via.placeholder.com/300?text=Image+Not+Found";
+                                                }}
+                                            />
+                                        )}
+
+                                        {/* Hover Overlay */}
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                            {/* Top Buttons (Save/Cart) */}
+                                            <div className="absolute top-4 right-4 flex gap-2">
+                                                <button className="p-2 backdrop-blur-md bg-white/20 hover:bg-white/40 text-white rounded-full transition-all duration-200" title="Save">
+                                                    <Heart size={18} />
+                                                </button>
+                                                {item.price > 0 && (
+                                                    <button className="p-2 backdrop-blur-md bg-white/20 hover:bg-white/40 text-white rounded-full transition-all duration-200" title="Add to Cart">
+                                                        <ShoppingCart size={18} />
+                                                    </button>
+                                                )}
+                                            </div>
+
+                                            {/* Bottom Info */}
+                                            <div className="absolute bottom-4 left-4 text-white">
+                                                <h3 className="text-sm font-bold leading-tight truncate max-w-[180px]">
+                                                    {item.title}
+                                                </h3>
+                                                <p className="text-xs opacity-80 font-medium">
+                                                    {item.category || "Uncategorized"}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Popular Badge */}
+                                    {activeTab === "popular" && (
+                                        <div className="absolute top-4 left-4 bg-rose-600 text-white px-3 py-1 rounded-full text-[10px] font-black tracking-wider uppercase flex items-center gap-1.5 shadow-lg shadow-rose-600/30 z-10">
+                                            <FaFire size={10} /> Popular
+                                        </div>
+                                    )}
+                                </Link>
+                            );
+                        })}
                     </div>
                 )}
 

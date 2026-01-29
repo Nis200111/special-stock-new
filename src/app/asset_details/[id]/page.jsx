@@ -1,9 +1,13 @@
 "use client";
 
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, useCallback } from "react";
 import { useParams } from "next/navigation";
 import styles from "./asset_details.module.css";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Trash2 } from "lucide-react";
+import ConfirmationModal from "@/components/ui/ConfirmationModal";
+import { deleteItem } from "@/app/actions/itemActions";
 
 export default function AssetDetailsPage() {
     const params = useParams();
@@ -12,12 +16,34 @@ export default function AssetDetailsPage() {
     const [asset, setAsset] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [currentUser, setCurrentUser] = useState(null);
+
+    const router = useRouter();
+
+    // ---- Confirmation Modal state ----
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     // ---- UI state ----
     const [descExpanded, setDescExpanded] = useState(false);
     const [copied, setCopied] = useState(false);
 
     useEffect(() => {
+        // Get user from localStorage
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+            try {
+                const user = JSON.parse(storedUser);
+                // Ensure role is present (it might be in a separate key)
+                const storedRole = localStorage.getItem("userRole");
+                if (!user.role && storedRole) {
+                    user.role = storedRole;
+                }
+                setCurrentUser(user);
+            } catch (e) {
+                console.error("Failed to parse user from localStorage", e);
+            }
+        }
+
         if (!id) return;
 
         const fetchAsset = async () => {
@@ -78,6 +104,11 @@ export default function AssetDetailsPage() {
             alert("Failed to download file.");
         }
     };
+
+    const canRemove = asset && currentUser && (
+        String(currentUser.id) === String(asset.sellerId) ||
+        (currentUser.role && ['admin', 'super_admin', 'manager'].includes(currentUser.role.toLowerCase().trim()))
+    );
 
     if (loading) return <div className="flex justify-center items-center h-screen">Loading...</div>;
     if (error || !asset) return <div className="flex justify-center items-center h-screen text-red-500">{error || "Asset not found"}</div>;
@@ -242,6 +273,16 @@ export default function AssetDetailsPage() {
                             >
                                 Download Original (No Watermark)
                             </button>
+
+                            {canRemove && (
+                                <button
+                                    className="mt-4 w-full flex items-center justify-center gap-2 py-3 px-6 rounded-xl border-2 border-red-600 text-red-600 font-bold hover:bg-red-600 hover:text-white transition-all duration-300 group shadow-sm hover:shadow-red-200 hover:shadow-lg"
+                                    onClick={() => setIsModalOpen(true)}
+                                >
+                                    <Trash2 size={18} className="group-hover:scale-110 transition-transform" />
+                                    Remove
+                                </button>
+                            )}
                         </section>
 
                         {/* Details */}
@@ -295,6 +336,16 @@ export default function AssetDetailsPage() {
                     <p className={styles.copyText}>© 2003-2026 Special Stocks, Inc.</p>
                 </div>
             </footer>
+
+            {/* CONFIRMATION MODAL */}
+            <ConfirmationModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                itemId={asset.id}
+                itemTitle={asset.title}
+                sellerId={currentUser?.id}
+                userRole={currentUser?.role}
+            />
         </div>
     );
 }

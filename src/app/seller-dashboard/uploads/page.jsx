@@ -6,14 +6,34 @@ import { useRouter } from 'next/navigation';
 import {
     ArrowLeft, Upload, Image as ImageIcon, Download, Edit, Trash2, Eye, DollarSign, Tag
 } from 'lucide-react';
+import ConfirmationModal from '@/components/ui/ConfirmationModal';
+import { deleteItem } from '@/app/actions/itemActions';
 
 const MyUploadsPage = () => {
     const router = useRouter();
     const [uploads, setUploads] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
+    const [currentUser, setCurrentUser] = useState(null);
+
+    // Modal state
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedItem, setSelectedItem] = useState(null);
 
     useEffect(() => {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            try {
+                const user = JSON.parse(storedUser);
+                const storedRole = localStorage.getItem('userRole');
+                if (!user.role && storedRole) {
+                    user.role = storedRole;
+                }
+                setCurrentUser(user);
+            } catch (e) {
+                console.error('Error parsing user:', e);
+            }
+        }
         fetchUploads();
     }, []);
 
@@ -49,6 +69,16 @@ const MyUploadsPage = () => {
 
     const handleDownload = async (filename) => {
         window.open(`http://localhost:5000/api/seller/download/${filename}`, '_blank');
+    };
+
+    const handleOpenDeleteModal = (upload) => {
+        setSelectedItem(upload);
+        setIsModalOpen(true);
+    };
+
+    const handleRemoveSuccess = () => {
+        // Refresh the list locally
+        setUploads(prev => prev.filter(item => item.id !== selectedItem?.id));
     };
 
     return (
@@ -184,7 +214,11 @@ const MyUploadsPage = () => {
                                             <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
                                                 <Edit size={18} />
                                             </button>
-                                            <button className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                            <button
+                                                onClick={() => handleOpenDeleteModal(upload)}
+                                                className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors border border-transparent hover:border-red-100"
+                                                title="Remove Item"
+                                            >
                                                 <Trash2 size={18} />
                                             </button>
                                         </div>
@@ -195,6 +229,23 @@ const MyUploadsPage = () => {
                     </>
                 )}
             </div>
+
+            {/* Confirmation Modal */}
+            {selectedItem && (
+                <ConfirmationModal
+                    isOpen={isModalOpen}
+                    onClose={() => {
+                        setIsModalOpen(false);
+                        setSelectedItem(null);
+                    }}
+                    itemId={selectedItem.id}
+                    itemTitle={selectedItem.title}
+                    sellerId={currentUser?.id}
+                    userRole={currentUser?.role}
+                    redirectPath={null} // Don't redirect on this page
+                    onSuccess={handleRemoveSuccess} // Refresh local list
+                />
+            )}
         </div>
     );
 };
