@@ -1,0 +1,147 @@
+/* Google Account Chooser Container */
+.googleContainer {
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    padding: 0;
+    overflow: hidden;
+}
+
+/* Google Header Section */
+.googleHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 24px 24px 20px 24px;
+    border-bottom: 1px solid #e8eaed;
+}
+
+.googleLogoIcon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.googleTitle {
+    font-size: 16px;
+    font-weight: 400;
+    color: #202124;
+    margin: 0;
+    font-family: var(--font-poppins), sans-serif;
+    letter-spacing: 0.15px;
+}
+
+/* Account Chooser Section */
+.accountChooser {
+    padding: 32px 40px;
+    text-align: left;
+}
+
+.chooserHeading {
+    font-size: 24px;
+    font-weight: 400;
+    color: #202124;
+    margin: 0 0 8px 0;
+    font-family: var(--font-poppins), sans-serif;
+    letter-spacing: 0;
+}
+
+.chooserSubtext {
+    font-size: 16px;
+    font-weight: 400;
+    color: #5f6368;
+    margin: 0;
+    font-family: var(--font-poppins), sans-serif;
+}
+
+.siteName {
+    color: #1a73e8;
+    font-weight: 500;
+}
+
+/* Account Button */
+.accountButton {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 40px;
+    border: none;
+    border-top: 1px solid #e8eaed;
+    border-bottom: 1px solid #e8eaed;
+    background: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    text-align: left;
+}
+
+.accountButton:hover {
+    background-color: #f1f3f4;
+}
+
+.accountButton:active {
+    background-color: #e8eaed;
+}
+
+.accountIcon {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+}
+
+.accountIconSvg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.accountText {
+    font-size: 14px;
+    font-weight: 500;
+    color: #3c4043;
+    font-family: var(--font-poppins), sans-serif;
+    letter-spacing: 0.25px;
+}
+
+/* Info Text Section */
+.infoText {
+    padding: 16px 40px 24px 40px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #5f6368;
+    margin: 0;
+    font-family: var(--font-poppins), sans-serif;
+}
+
+.infoLink {
+    color: #1a73e8;
+    text-decoration: none;
+}
+
+.infoLink:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .accountChooser {
+        padding: 24px 24px;
+    }
+
+    .accountButton {
+        padding: 12px 24px;
+    }
+
+    .infoText {
+        padding: 16px 24px 24px 24px;
+    }
+
+    .chooserHeading {
+        font-size: 20px;
+    }
+
+    .chooserSubtext {
+        font-size: 14px;
+    }
+}
