@@ -24,6 +24,7 @@ export { default as Navbar } from './Navbar';
 export { default as Footer } from './Footer';
 export { default as TopBanner } from './TopBanner';
 export { default as GoogleSignInButton } from './GoogleSignInButton';
+export { default as WatermarkedImage } from './WatermarkedImage';
 
 // Hero Component
 export const Hero = () => {

@@ -8,7 +8,8 @@ import { useRouter } from "next/navigation";
 import { Trash2, X } from "lucide-react";
 import ConfirmationModal from "@/components/ui/ConfirmationModal";
 import { deleteItem } from "@/app/actions/itemActions";
-import { Navbar } from "@/components";
+import { Navbar, WatermarkedImage } from "@/components";
+import IMGLOGO from "../../../assets/speciallogo.png";
 
 export default function AssetDetailsPage() {
     const params = useParams();
@@ -101,11 +102,11 @@ export default function AssetDetailsPage() {
         if (!asset) return '';
 
         // Priority:
-        // 1. watermarkedFilepath (if explicitly available)
-        // 2. filepath (which might be watermarked by backend controller)
-        // 3. imageUrl (potential new field for assets)
+        // 1. filepath (Clean original - preferred to avoid backend-burnt watermarks)
+        // 2. imageUrl
+        // 3. watermarkedFilepath (Fallback)
 
-        let pathStr = asset.watermarkedFilepath || asset.filepath || asset.imageUrl;
+        let pathStr = asset.filepath || asset.imageUrl || asset.watermarkedFilepath;
 
         if (!pathStr) {
             console.warn("No filepath found for asset:", asset.id);
@@ -219,10 +220,12 @@ export default function AssetDetailsPage() {
                                         src={previewUrl}
                                     />
                                 ) : (
-                                    <img
+                                    <WatermarkedImage
                                         src={previewUrl}
                                         alt={asset.title}
-                                        className="w-full h-auto object-contain max-h-[600px] bg-black/5 cursor-zoom-in"
+                                        watermarkSrc={IMGLOGO?.src}
+                                        imgClassName="w-full h-auto object-contain max-h-[600px] bg-black/5 cursor-zoom-in"
+                                        className="cursor-zoom-in"
                                         onClick={() => setIsImageModalOpen(true)}
                                     />
                                 )}
@@ -405,16 +408,13 @@ export default function AssetDetailsPage() {
                             {asset.title}
                         </h1>
 
-                        <img
+                        <WatermarkedImage
                             src={previewUrl}
                             alt={asset.title}
-                            className="shadow-2xl"
-                            style={{
-                                maxWidth: '100%',
-                                maxHeight: '90vh',
-                                objectFit: 'contain',
-                                display: 'block'
-                            }}
+                            watermarkSrc={IMGLOGO?.src}
+                            watermarkClassName="w-[40%]"
+                            imgClassName="shadow-2xl object-contain h-[85vh] w-auto max-w-[90vw] mx-auto"
+                            className="relative w-fit mx-auto flex items-center justify-center"
                             onClick={(e) => e.stopPropagation()}
                         />
 
@@ -427,7 +427,8 @@ export default function AssetDetailsPage() {
                             color: 'rgba(255,255,255,0.6)',
                             fontSize: '14px',
                             fontWeight: 500,
-                            pointerEvents: 'none'
+                            pointerEvents: 'none',
+                            zIndex: 9999
                         }}>
                             Press ESC to close
                         </div>
