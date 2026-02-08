@@ -61,7 +61,7 @@ export const Hero = () => {
                         <FaMusic />
                         <span>Music</span>
                     </Link>
-                    <Link href="/exclusiveImages" className="flex items-center mx-4 gap-2 hover:text-red-500 transition-colors text-purple-400">
+                    <Link href="/exclusiveImages" className="flex items-center mx-4 gap-2 hover:text-red-500 transition-colors">
                         <FaRobot />
                         <span>Exclusive Images</span>
                     </Link>

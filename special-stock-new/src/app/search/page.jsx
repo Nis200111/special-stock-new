@@ -121,8 +121,8 @@ export default function SearchPage() {
         <div className={styles.feedbackCard}>
           <p className={styles.feedbackTitle}>Did these results match your search?</p>
           <div className={styles.feedbackBtns}>
-            <button className={styles.feedbackBtn} aria-label="Yes"><i class="far fa-smile text-xl text-gray-400 hover:text-green-500"></i></button>
-            <button className={styles.feedbackBtn} aria-label="No"><i class="far fa-frown text-xl text-gray-400 hover:text-red-500"></i></button>
+            <button className={styles.feedbackBtn} aria-label="Yes"><i className="far fa-smile text-xl text-gray-400 hover:text-green-500"></i></button>
+            <button className={styles.feedbackBtn} aria-label="No"><i className="far fa-frown text-xl text-gray-400 hover:text-red-500"></i></button>
           </div>
         </div>
       </section>

@@ -5,7 +5,7 @@ require('dotenv').config();
 const PORT = process.env.PORT || 5000;
 
 // Sync database and start server
-db.sequelize.sync().then(async () => {
+db.sequelize.sync({ alter: true }).then(async () => {
     console.log('Database synced successfully.');
     await require('./src/seeders')();
     app.listen(PORT, () => {
