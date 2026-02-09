@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs').promises;
 const ffmpegService = require('./ffmpeg.service');
 
-const WATERMARK_PATH = path.join(process.cwd(), 'public', 'watermark.png');
+const WATERMARK_PATH = path.join(process.cwd(), 'public', 'waterMark2.png');
 
 /**
  * Process uploaded image/video: create thumbnail and watermark
@@ -78,7 +78,8 @@ async function processImage(imagePath, outputDir, filename) {
 
             // Use the RESIZED image as input for watermarking
             // Pass known dimensions (800x600) to skip FFprobe and speed up processing
-            await ffmpegService.watermarkImage(resizedPath, watermarkedPath, WATERMARK_PATH, 800, 600);
+            await ffmpegService.applyImageWatermark(resizedPath, watermarkedPath, WATERMARK_PATH);
+
 
             // Clean up temp resized file
             try {

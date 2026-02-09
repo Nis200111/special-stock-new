@@ -6,9 +6,9 @@ async function test() {
     console.log('--- Starting Watermark Test ---');
 
     // 1. Create a dummy image
-    const inputPath = path.join(__dirname, 'test_input.jpg');
+    const inputPath = path.join(__dirname, 'waterMarked2.png');
     const outputPath = path.join(__dirname, 'test_output.webp');
-    const watermarkPath = path.join(__dirname, 'public', 'watermark.png');
+    const watermarkPath = path.join(__dirname, 'public', 'waterMark2.png');
 
     console.log('Input:', inputPath);
     console.log('Output:', outputPath);

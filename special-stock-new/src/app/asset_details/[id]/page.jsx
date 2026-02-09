@@ -8,8 +8,7 @@ import { useRouter } from "next/navigation";
 import { Trash2, X } from "lucide-react";
 import ConfirmationModal from "@/components/ui/ConfirmationModal";
 import { deleteItem } from "@/app/actions/itemActions";
-import { Navbar, WatermarkedImage } from "@/components";
-import IMGLOGO from "../../../assets/speciallogo.png";
+import { Navbar } from "@/components";
 
 export default function AssetDetailsPage() {
     const params = useParams();
@@ -220,14 +219,13 @@ export default function AssetDetailsPage() {
                                         src={previewUrl}
                                     />
                                 ) : (
-                                    <WatermarkedImage
+                                    <img
                                         src={previewUrl}
                                         alt={asset.title}
-                                        watermarkSrc={IMGLOGO?.src}
-                                        imgClassName="w-full h-auto object-contain max-h-[600px] bg-black/5 cursor-zoom-in"
-                                        className="cursor-zoom-in"
+                                        className="w-full h-auto object-contain max-h-[600px] bg-black/5 cursor-zoom-in"
                                         onClick={() => setIsImageModalOpen(true)}
                                     />
+
                                 )}
                             </div>
                         </div>
@@ -407,16 +405,6 @@ export default function AssetDetailsPage() {
                         >
                             {asset.title}
                         </h1>
-
-                        <WatermarkedImage
-                            src={previewUrl}
-                            alt={asset.title}
-                            watermarkSrc={IMGLOGO?.src}
-                            watermarkClassName="w-[40%]"
-                            imgClassName="shadow-2xl object-contain h-[85vh] w-auto max-w-[90vw] mx-auto"
-                            className="relative w-fit mx-auto flex items-center justify-center"
-                            onClick={(e) => e.stopPropagation()}
-                        />
 
                         {/* Footer text */}
                         <div style={{
