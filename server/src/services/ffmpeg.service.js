@@ -215,7 +215,7 @@ exports.applyImageWatermark = (inputPath, outputPath, watermarkPath) => {
         // watermark width = 30% of image width  (change 0.30 -> 0.35/0.40 for bigger)
         // position = right padding 24px, vertically centered
         const filterComplex =
-            `[0:v]scale=1280:-1[norm];` +
+            `[0:v]scale=1180:-1[norm];` +
             `[1:v][norm]scale2ref=w=iw*0.30:h='ow/mdar'[wm_sized][norm_ref];` +
             `[norm_ref][wm_sized]overlay=W-w-0:(H-h)/2:format=auto`;
 
