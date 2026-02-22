@@ -10,8 +10,8 @@ async function verifyLogin() {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    phone: '0716507009',
-                    password: 'password123'
+                    email: 'admin@stockmedia.com', // changed to email as per controller logic
+                    password: '1234567'
                 })
             });
             const data = await response.json();
@@ -36,7 +36,7 @@ async function verifyLogin() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     email: 'admin@stockmedia.com',
-                    password: 'password123'
+                    password: '1234567'
                 })
             });
             const data = await response.json();

@@ -1,5 +1,11 @@
 module.exports = (sequelize, Sequelize) => {
     const User = sequelize.define("users", {
+        // Adding email field to the model
+        email: {
+            type: Sequelize.STRING,
+            allowNull: true, // Optional: Set to false if email is mandatory
+            unique: true
+        },
         phone: {
             type: Sequelize.STRING,
             allowNull: false,

@@ -12,20 +12,20 @@ export default function TopBanner() {
     }, []);
 
     return (
-        <div className="bg-[#3477a2] text-white text-center text-small sm:text-sm py-3 sm:py-4 px-2 tracking-[0.02rem] flex items-center justify-center gap-4">
-            <span className="block sm:inline">
+        <div className="bg-[#3477a2] text-white text-center text-xs sm:text-sm py-2 px-2 tracking-tight flex items-center justify-center gap-4 min-h-[40px]">
+            <span className="block sm:inline font-medium">
                 Get 10 royalty-free image downloads each month with a cost-saving subscription.
             </span>
             {userName ? (
-                <div className="bg-white text-black px-4 py-1.5 rounded-full text-xs font-bold inline-block">
+                <div className="bg-white text-black px-4 py-1 rounded-full text-[10px] sm:text-xs font-bold inline-block">
                     Welcome, {userName}
                 </div>
             ) : (
                 <Link
                     href="/register"
-                    className="bg-white text-black px-4 py-1.5 rounded-full text-xs font-bold hover:bg-gray-100 transition-colors inline-block"
+                    className="bg-white text-black px-4 py-1 rounded-full text-[10px] sm:text-xs font-bold hover:bg-gray-100 transition-colors inline-block"
                 >
-                    Buy Now
+                    Buy now
                 </Link>
             )}
         </div>

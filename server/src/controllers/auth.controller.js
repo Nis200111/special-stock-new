@@ -72,7 +72,8 @@ exports.loginUser = async (req, res) => {
     try {
         const user = await User.findOne({
             where: {
-                phone: req.body.phone
+                // Changed from phone: req.body.phone to email: req.body.email
+                email: req.body.email
             }
         });
 
@@ -98,7 +99,7 @@ exports.loginUser = async (req, res) => {
 
         res.status(200).send({
             id: user.id,
-            phone: user.phone,
+            email: user.email, // Return email instead of phone
             role: user.role,
             accessToken: token
         });

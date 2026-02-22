@@ -1,0 +1,15 @@
+🚀 Starting B2 Debug Test...
+📂 Listing Buckets...
+Middleware: Requesting...
+URL: https://s3.us-east-005.backblazeb2.com/
+Headers: {
+  "x-amz-user-agent": "aws-sdk-js/3.990.0",
+  "user-agent": "aws-sdk-js/3.990.0 ua/2.1 os/win32#10.0.22000 lang/js md/nodejs#24.13.0 api/s3#3.990.0 m/N,E,e",
+  "host": "s3.us-east-005.backblazeb2.com",
+  "amz-sdk-invocation-id": "0d7a63ee-d3f6-40f3-9dde-4347f64129fd",
+  "amz-sdk-request": "attempt=1; max=3",
+  "x-amz-date": "20260216T104925Z",
+  "x-amz-content-sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "authorization": "AWS4-HMAC-SHA256 Credential=005c0c8e6f3433f0000000001/20260216/us-east-005/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-request;host;x-amz-content-sha256;x-amz-date;x-amz-user-agent, Signature=c880b7ac72e183a4839c2971bea2159167b3b09ebda90cf326140fcbd50f9a9e"
+}
+❌ Failed: Signature validation failed

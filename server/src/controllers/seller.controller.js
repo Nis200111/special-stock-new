@@ -7,9 +7,14 @@ const db = require('../models');
 const imageProcessingService = require('../services/imageProcessing.service');
 const path = require('path');
 const fs = require('fs').promises;
+const b2Service = require('../services/b2.service');
 
 const SellerImage = db.sellerImage;
 
+/**
+ * Upload and process seller image
+ * POST /api/seller/upload-image
+ */
 /**
  * Upload and process seller image
  * POST /api/seller/upload-image
@@ -46,6 +51,7 @@ exports.uploadImage = async (req, res) => {
         });
 
         // Create database entry with 'pending' status
+        // We initially store local paths, but will update them to B2 URLs shortly
         const imageRecord = await SellerImage.create({
             sellerId: parseInt(sellerId),
             title,
@@ -54,7 +60,7 @@ exports.uploadImage = async (req, res) => {
             tags: tags || '',
             price: parseFloat(price),
             filename,
-            filepath: `/uploads/${filename}`,
+            filepath: `/uploads/${filename}`, // Temporary local path
             originalName: uploadedFile.originalname,
             fileSize: uploadedFile.size,
             contentType: contentType || 'image',
@@ -73,19 +79,54 @@ exports.uploadImage = async (req, res) => {
                     filename
                 );
 
-                // Update record with processed image paths
+                console.log('✅ Local processing done.');
+
+                // 1. Update record with LOCAL paths first (so it works immediately)
                 await imageRecord.update({
                     thumbnailPath: processResult.thumbnailPath,
                     watermarkedFilepath: processResult.watermarkedPath,
-                    processingStatus: 'completed'
+                    processingStatus: 'completed' // frontend expects 'completed'
                 });
 
-                console.log('✅ Image processing completed for:', title);
+                // 2. Try Uploading to B2
+                try {
+                    console.log('📤 Uploading to B2...');
+                    const [originalUrl, thumbnailUrl, watermarkedUrl] = await Promise.all([
+                        b2Service.uploadFileFromPath(originalFilepath, 'originals'),
+                        processResult.thumbnailPath ? b2Service.uploadFileFromPath(path.join(process.cwd(), processResult.thumbnailPath), 'thumbnails') : null,
+                        b2Service.uploadFileFromPath(path.join(process.cwd(), processResult.watermarkedPath), 'watermarked')
+                    ]);
+
+                    console.log('✅ B2 Uploads completed:', { originalUrl, thumbnailUrl, watermarkedUrl });
+
+                    // 3. Update record with B2 URLs
+                    await imageRecord.update({
+                        filepath: originalUrl,
+                        thumbnailPath: thumbnailUrl,
+                        watermarkedFilepath: watermarkedUrl,
+                        processingStatus: 'completed'
+                    });
+
+                    // 4. Clean up local files ONLY if B2 upload succeeded
+                    try {
+                        await fs.unlink(originalFilepath);
+                        if (processResult.thumbnailPath) await fs.unlink(path.join(process.cwd(), processResult.thumbnailPath));
+                        await fs.unlink(path.join(process.cwd(), processResult.watermarkedPath));
+                        console.log('🧹 Local temporary files cleaned up.');
+                    } catch (cleanupError) {
+                        console.warn('⚠️ Failed to clean up local files:', cleanupError.message);
+                    }
+
+                } catch (b2Error) {
+                    console.error('⚠️ B2 Upload failed, but local files are saved:', b2Error.message);
+                    // We do NOT fail the request here. The user still gets the local images.
+                    // You might want to update status to 'b2_failed' or just leave it as 'local_completed'
+                }
 
             } catch (processingError) {
                 console.error('❌ Image processing failed:', processingError);
 
-                // Update status to failed but keep the original image
+                // Update status to failed
                 await imageRecord.update({
                     processingStatus: 'failed'
                 });
@@ -100,7 +141,7 @@ exports.uploadImage = async (req, res) => {
                 title: imageRecord.title,
                 status: imageRecord.status,
                 processingStatus: imageRecord.processingStatus,
-                filepath: imageRecord.filepath,
+                filepath: imageRecord.filepath, // Will avail eventually
                 thumbnailPath: imageRecord.thumbnailPath
             }
         });

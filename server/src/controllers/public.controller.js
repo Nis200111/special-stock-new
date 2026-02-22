@@ -4,6 +4,7 @@
  * Only serves approved images
  */
 
+const path = require('path');
 const db = require('../models');
 const SellerImage = db.sellerImage;
 const { Op } = require('sequelize');
