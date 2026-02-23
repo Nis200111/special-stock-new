@@ -1,22 +1,30 @@
 "use client";
 
+import { useState } from "react";
 import { signIn } from "next-auth/react";
 
 export default function GoogleSignInButton() {
+    const [loading, setLoading] = useState(false);
+
     const handleGoogleSignIn = async () => {
+        if (loading) return;
+        setLoading(true);
+
         try {
-            // Redirect to root - middleware will route based on role
-            await signIn("google", {
-                callbackUrl: "/",
-            });
+            // Redirect to "/" after Google auth
+            // (Your middleware can route based on role or session)
+            await signIn("google", { callbackUrl: "/" });
         } catch (error) {
             console.error("Error signing in with Google:", error);
+            setLoading(false);
         }
     };
 
     return (
         <button
             onClick={handleGoogleSignIn}
+            disabled={loading}
+            type="button"
             style={{
                 width: "100%",
                 display: "flex",
@@ -26,19 +34,21 @@ export default function GoogleSignInButton() {
                 padding: "14px 16px",
                 border: "1px solid #d1d5db",
                 borderRadius: "10px",
-                background: "#ffffff",
+                background: loading ? "#f3f4f6" : "#ffffff",
                 color: "#374151",
                 fontWeight: "700",
                 fontSize: "16px",
-                cursor: "pointer",
+                cursor: loading ? "not-allowed" : "pointer",
                 transition: "all 0.2s ease",
+                opacity: loading ? 0.8 : 1,
             }}
-            type="button"
             onMouseOver={(e) => {
+                if (loading) return;
                 e.currentTarget.style.background = "#f9fafb";
                 e.currentTarget.style.borderColor = "#9ca3af";
             }}
             onMouseOut={(e) => {
+                if (loading) return;
                 e.currentTarget.style.background = "#ffffff";
                 e.currentTarget.style.borderColor = "#d1d5db";
             }}
@@ -48,6 +58,7 @@ export default function GoogleSignInButton() {
                 style={{ width: "20px", height: "20px" }}
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
             >
                 <path
                     d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -68,7 +79,7 @@ export default function GoogleSignInButton() {
             </svg>
 
             {/* Button Text */}
-            <span>Continue with Google</span>
+            <span>{loading ? "Signing in..." : "Continue with Google"}</span>
         </button>
     );
 }
